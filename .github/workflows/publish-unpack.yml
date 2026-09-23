@@ -24,7 +24,7 @@ jobs:
             echo "Archive not found, nothing to unpack."
             exit 0
           fi
-          unzip -o "$ARCHIVE" -d .
+          unzip -o "$ARCHIVE" -d . || true
           rm -rf .publish
           rm -f .github/workflows/publish-unpack.yml
           git config user.name "github-actions[bot]"
