@@ -49,11 +49,11 @@
 
 ### Каталог — русский интерфейс
 
-![Каталог на русском](screenshots/catalog-ru.jpg)
+![Каталог на русском](screenshots/catalog-ru.webp)
 
 ### Информация о модели — русский интерфейс
 
-![Информация о модели на русском](screenshots/model-ru.jpg)
+![Информация о модели на русском](screenshots/model-ru.webp)
 
 > Скриншоты сделаны на локальных демонстрационных данных. Интерфейс, локализация и поведение элементов — реальные.
 
@@ -131,10 +131,10 @@ CivitaiRed_Browser/
 │   ├── index.html
 │   └── style.css
 ├── screenshots/
-│   ├── catalog-ru.jpg
-│   ├── model-ru.jpg
-│   ├── catalog-en.jpg
-│   └── model-en.jpg
+│   ├── catalog-ru.webp
+│   ├── model-ru.webp
+│   ├── catalog-en.webp
+│   └── model-en.webp
 ├── .gitignore
 ├── package.json
 ├── server.js
@@ -175,11 +175,11 @@ The project runs from a single `server.js` entry point and does not require Elec
 
 ### Catalog — English UI
 
-![Catalog in English](screenshots/catalog-en.jpg)
+![Catalog in English](screenshots/catalog-en.webp)
 
 ### Model details — English UI
 
-![Model details in English](screenshots/model-en.jpg)
+![Model details in English](screenshots/model-en.webp)
 
 > Screenshots use local showcase data. The interface, localization, and UI behavior shown are real.
 
@@ -257,10 +257,10 @@ CivitaiRed_Browser/
 │   ├── index.html
 │   └── style.css
 ├── screenshots/
-│   ├── catalog-ru.jpg
-│   ├── model-ru.jpg
-│   ├── catalog-en.jpg
-│   └── model-en.jpg
+│   ├── catalog-ru.webp
+│   ├── model-ru.webp
+│   ├── catalog-en.webp
+│   └── model-en.webp
 ├── .gitignore
 ├── package.json
 ├── server.js

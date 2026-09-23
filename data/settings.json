@@ -1,0 +1,10 @@
+{
+  "theme": "midnight",
+  "defaultType": "",
+  "defaultBaseModel": "",
+  "defaultSort": "Highest Rated",
+  "defaultPeriod": "AllTime",
+  "compactCards": false,
+  "pageSize": 24,
+  "language": "ru"
+}
