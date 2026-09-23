@@ -49,11 +49,11 @@
 
 ### Каталог — русский интерфейс
 
-![Каталог на русском](screenshots/catalog-ru.webp)
+![Каталог на русском](screenshots/catalog-ru.svg)
 
 ### Информация о модели — русский интерфейс
 
-![Информация о модели на русском](screenshots/model-ru.webp)
+![Информация о модели на русском](screenshots/model-ru.svg)
 
 > Скриншоты сделаны на локальных демонстрационных данных. Интерфейс, локализация и поведение элементов — реальные.
 
@@ -175,11 +175,11 @@ The project runs from a single `server.js` entry point and does not require Elec
 
 ### Catalog — English UI
 
-![Catalog in English](screenshots/catalog-en.webp)
+![Catalog in English](screenshots/catalog-en.svg)
 
 ### Model details — English UI
 
-![Model details in English](screenshots/model-en.webp)
+![Model details in English](screenshots/model-en.svg)
 
 > Screenshots use local showcase data. The interface, localization, and UI behavior shown are real.
 
