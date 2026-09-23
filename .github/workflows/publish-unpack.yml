@@ -15,6 +15,10 @@ jobs:
       - name: Unpack project
         shell: bash
         run: |
+          mkdir -p .publish
+          if compgen -G ".publish/chunks/*.txt" > /dev/null; then
+            cat .publish/chunks/*.txt | base64 -d > .publish/CivitaiRed_Browser_1.3.1.zip
+          fi
           ARCHIVE=".publish/CivitaiRed_Browser_1.3.1.zip"
           if [ ! -f "$ARCHIVE" ]; then
             echo "Archive not found, nothing to unpack."
