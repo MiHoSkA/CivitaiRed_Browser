@@ -627,7 +627,7 @@ const server=http.createServer(async(req,res)=>{
   }
 });
 server.on('clientError',(error,socket)=>{log('warn','HTTP client error',{error:error.message});if(socket.writable)socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')});
-function removeObsoleteFiles(){for(const file of [path.join(ROOT,'README.md'),path.join(DATA,'README.txt'),path.join(DATA,'history.json'),path.join(DATA,'downloads.json')]){try{if(fs.existsSync(file))fs.unlinkSync(file)}catch(error){log('warn','Failed to remove obsolete file',{file:path.relative(ROOT,file),error:error.message})}}}
+function removeObsoleteFiles(){for(const file of [path.join(DATA,'README.txt'),path.join(DATA,'history.json'),path.join(DATA,'downloads.json')]){try{if(fs.existsSync(file))fs.unlinkSync(file)}catch(error){log('warn','Failed to remove obsolete file',{file:path.relative(ROOT,file),error:error.message})}}}
 server.on('error',error=>{log('error','Server failed to start',{code:error.code,error:error.message});process.exitCode=1});
 removeObsoleteFiles();
 try{loadFavorites()}catch(error){log('warn','favorites.json migration failed',{error:error.message})}
