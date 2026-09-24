@@ -1,10 +1,10 @@
 const $=selector=>document.querySelector(selector);
 const I18N={
   ru:{
-    home:'Главная',settings:'Настройки',navigation:'Навигация',discover:'Обзор',favorites:'Избранное',filters:'Фильтры',modelType:'Тип модели',allTypes:'Все типы',baseModel:'Базовая модель',allBaseModels:'Все базовые модели',groupSdxl:'SDXL-экосистема',groupFlux:'Flux и новые',groupVideo:'Видео',other:'Другое',sorting:'Сортировка',sortRated:'Самые высоко оценённые',sortDownloaded:'Самые скачиваемые',sortNewest:'Самые новые',period:'Период',periodAll:'За всё время',periodYear:'За год',periodMonth:'За месяц',periodWeek:'За неделю',periodDay:'За день',resetFilters:'Сбросить фильтры',apiChecking:'Проверка API…',serverConnected:'Сервер подключён',catalog:'КАТАЛОГ',results:'результатов',refresh:'Обновить',loading:'Получаем данные Civitai…',emptyTitle:'Здесь пока пусто',emptyText:'Попробуй изменить запрос или фильтры.',loadMore:'Показать ещё',system:'СИСТЕМА',tokenDescription:'API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.',apiToken:'API-ключ Civitai',tokenPlaceholder:'Введите API key',saveSettings:'Сохранить настройки',discoverTitle:'Популярные модели',discoverSubtitle:'Обновляется только вручную',favoritesTitle:'Избранное',favoritesSubtitle:'Сохранённые модели',image:'ИЗОБРАЖЕНИЕ',video:'ВИДЕО',unknownAuthor:'Неизвестный автор',baseModelTitle:'Базовая модель: {value}',addedFavorite:'Добавлено в избранное',removedFavorite:'Удалено из избранного',favoriteError:'Не удалось изменить избранное: {error}',filtersSaveError:'Не удалось сохранить фильтры',fallbackNotice:'Поиск Civitai сейчас перегружен — включён резервный поиск. Проверено моделей: {scanned}, найдено совпадений: {total}.',noMoreModels:'Новых моделей больше нет.',repeatedModels:'Civitai сейчас повторяет одну и ту же выдачу. Новые карточки не добавлены.',retrying:'{error} Автоматический повтор через 5 секунд…',loadModelsError:'Не удалось получить модели: {error}',author:'Автор',descriptionMissing:'Описание отсутствует',versionsFiles:'Версии и файлы',modelFile:'Файл модели',download:'Скачать',noFiles:'Нет доступных файлов',downloadStarted:'Загрузка началась',loadingModel:'Загрузка модели…',modelOpenError:'Не удалось открыть модель: {error}',modelDetailsError:'Не удалось загрузить подробности модели: {error}',apiConfigured:'API-ключ настроен',apiMissing:'API-ключ не задан',serverOnline:'Сервер онлайн · {host}{version}',tokenSaved:'Сохранён постоянно в .env: {token}',tokenMissing:'Ключ пока не сохранён',searchPlaceholder:'Найти модель, LoRA, checkpoint… (от {min} симв.)',searchTooShort:'Для поиска введи минимум {min} символа.',settingsSaved:'✓ Настройки сохранены',settingsToast:'Настройки сохранены',settingsError:'Ошибка: {error}',initializationError:'Ошибка запуска интерфейса: {error}',mediaLabel:'Медиа {number}',showAllVersions:'Показать все версии ({count})',showLessVersions:'Свернуть список версий',openOnCivitai:'Открыть на Civitai',switchLanguage:'Switch to English',byteB:'Б',byteKB:'КБ',byteMB:'МБ',byteGB:'ГБ'
+    home:'Главная',search:'Поиск',settings:'Настройки',modelDetails:'Подробности модели',showToken:'Показать API-ключ',hideToken:'Скрыть API-ключ',openModel:'Открыть модель {name}',navigation:'Навигация',discover:'Обзор',favorites:'Избранное',filters:'Фильтры',modelType:'Тип модели',allTypes:'Все типы',baseModel:'Базовая модель',allBaseModels:'Все базовые модели',groupSdxl:'SDXL-экосистема',groupFlux:'Flux и новые',groupVideo:'Видео',other:'Другое',sorting:'Сортировка',sortRated:'Самые высоко оценённые',sortDownloaded:'Самые скачиваемые',sortNewest:'Самые новые',period:'Период',periodAll:'За всё время',periodYear:'За год',periodMonth:'За месяц',periodWeek:'За неделю',periodDay:'За день',resetFilters:'Сбросить фильтры',apiChecking:'Проверка API…',serverConnected:'Сервер подключён',catalog:'КАТАЛОГ',results:'результатов',refresh:'Обновить',loading:'Получаем данные Civitai…',emptyTitle:'Здесь пока пусто',emptyText:'Попробуй изменить запрос или фильтры.',loadMore:'Показать ещё',system:'СИСТЕМА',tokenDescription:'API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.',apiToken:'API-ключ Civitai',tokenPlaceholder:'Введите API key',saveSettings:'Сохранить настройки',discoverTitle:'Популярные модели',discoverSubtitle:'Обновляется только вручную',favoritesTitle:'Избранное',favoritesSubtitle:'Сохранённые модели',image:'ИЗОБРАЖЕНИЕ',video:'ВИДЕО',unknownAuthor:'Неизвестный автор',baseModelTitle:'Базовая модель: {value}',addedFavorite:'Добавлено в избранное',removedFavorite:'Удалено из избранного',favoriteError:'Не удалось изменить избранное: {error}',filtersSaveError:'Не удалось сохранить фильтры',fallbackNotice:'Поиск Civitai сейчас перегружен — включён резервный поиск. Проверено моделей: {scanned}, найдено совпадений: {total}.',noMoreModels:'Новых моделей больше нет.',repeatedModels:'Civitai сейчас повторяет одну и ту же выдачу. Новые карточки не добавлены.',retrying:'{error} Автоматический повтор через 5 секунд…',loadModelsError:'Не удалось получить модели: {error}',author:'Автор',descriptionMissing:'Описание отсутствует',versionsFiles:'Версии и файлы',modelFile:'Файл модели',download:'Скачать',noFiles:'Нет доступных файлов',downloadStarted:'Загрузка началась',loadingModel:'Загрузка модели…',modelOpenError:'Не удалось открыть модель: {error}',modelDetailsError:'Не удалось загрузить подробности модели: {error}',apiConfigured:'API-ключ настроен',apiMissing:'API-ключ не задан',serverOnline:'Сервер онлайн · {host}{version}',tokenSaved:'Сохранён постоянно в .env: {token}',tokenMissing:'Ключ пока не сохранён',searchPlaceholder:'Найти модель, LoRA, checkpoint… (от {min} симв.)',searchTooShort:'Для поиска введи минимум {min} символа.',settingsSaved:'✓ Настройки сохранены',settingsToast:'Настройки сохранены',settingsError:'Ошибка: {error}',initializationError:'Ошибка запуска интерфейса: {error}',mediaLabel:'Медиа {number}',showAllVersions:'Показать все версии ({count})',showLessVersions:'Свернуть список версий',openOnCivitai:'Открыть на Civitai',switchLanguage:'Switch to English',byteB:'Б',byteKB:'КБ',byteMB:'МБ',byteGB:'ГБ'
   },
   en:{
-    home:'Home',settings:'Settings',navigation:'Navigation',discover:'Discover',favorites:'Favorites',filters:'Filters',modelType:'Model type',allTypes:'All types',baseModel:'Base model',allBaseModels:'All base models',groupSdxl:'SDXL ecosystem',groupFlux:'Flux and newer',groupVideo:'Video',other:'Other',sorting:'Sort',sortRated:'Highest rated',sortDownloaded:'Most downloaded',sortNewest:'Newest',period:'Period',periodAll:'All time',periodYear:'Year',periodMonth:'Month',periodWeek:'Week',periodDay:'Day',resetFilters:'Reset filters',apiChecking:'Checking API…',serverConnected:'Server connected',catalog:'CATALOG',results:'results',refresh:'Refresh',loading:'Loading Civitai data…',emptyTitle:'Nothing here yet',emptyText:'Try changing your search or filters.',loadMore:'Show more',system:'SYSTEM',tokenDescription:'The API key is stored permanently on the server in .env, has no deletion timer, and is never exposed to the interface.',apiToken:'Civitai API key',tokenPlaceholder:'Enter API key',saveSettings:'Save settings',discoverTitle:'Popular models',discoverSubtitle:'Updates only when requested',favoritesTitle:'Favorites',favoritesSubtitle:'Saved models',image:'IMAGE',video:'VIDEO',unknownAuthor:'Unknown author',baseModelTitle:'Base model: {value}',addedFavorite:'Added to favorites',removedFavorite:'Removed from favorites',favoriteError:'Failed to update favorites: {error}',filtersSaveError:'Failed to save filters',fallbackNotice:'Civitai search is overloaded, so fallback search is active. Scanned: {scanned}, matches: {total}.',noMoreModels:'There are no more new models.',repeatedModels:'Civitai is repeating the same results. No new cards were added.',retrying:'{error} Retrying automatically in 5 seconds…',loadModelsError:'Failed to load models: {error}',author:'Author',descriptionMissing:'No description available',versionsFiles:'Versions and files',modelFile:'Model file',download:'Download',noFiles:'No files available',downloadStarted:'Download started',loadingModel:'Loading model…',modelOpenError:'Failed to open model: {error}',modelDetailsError:'Failed to load model details: {error}',apiConfigured:'API key configured',apiMissing:'API key not configured',serverOnline:'Server online · {host}{version}',tokenSaved:'Stored permanently in .env: {token}',tokenMissing:'The key has not been saved yet',searchPlaceholder:'Find a model, LoRA, checkpoint… ({min}+ chars)',searchTooShort:'Enter at least {min} characters to search.',settingsSaved:'✓ Settings saved',settingsToast:'Settings saved',settingsError:'Error: {error}',initializationError:'Interface startup error: {error}',mediaLabel:'Media {number}',showAllVersions:'Show all versions ({count})',showLessVersions:'Show fewer versions',openOnCivitai:'Open on Civitai',switchLanguage:'Переключить на русский',byteB:'B',byteKB:'KB',byteMB:'MB',byteGB:'GB'
+    home:'Home',search:'Search',settings:'Settings',modelDetails:'Model details',showToken:'Show API key',hideToken:'Hide API key',openModel:'Open model {name}',navigation:'Navigation',discover:'Discover',favorites:'Favorites',filters:'Filters',modelType:'Model type',allTypes:'All types',baseModel:'Base model',allBaseModels:'All base models',groupSdxl:'SDXL ecosystem',groupFlux:'Flux and newer',groupVideo:'Video',other:'Other',sorting:'Sort',sortRated:'Highest rated',sortDownloaded:'Most downloaded',sortNewest:'Newest',period:'Period',periodAll:'All time',periodYear:'Year',periodMonth:'Month',periodWeek:'Week',periodDay:'Day',resetFilters:'Reset filters',apiChecking:'Checking API…',serverConnected:'Server connected',catalog:'CATALOG',results:'results',refresh:'Refresh',loading:'Loading Civitai data…',emptyTitle:'Nothing here yet',emptyText:'Try changing your search or filters.',loadMore:'Show more',system:'SYSTEM',tokenDescription:'The API key is stored permanently on the server in .env, has no deletion timer, and is never exposed to the interface.',apiToken:'Civitai API key',tokenPlaceholder:'Enter API key',saveSettings:'Save settings',discoverTitle:'Popular models',discoverSubtitle:'Updates only when requested',favoritesTitle:'Favorites',favoritesSubtitle:'Saved models',image:'IMAGE',video:'VIDEO',unknownAuthor:'Unknown author',baseModelTitle:'Base model: {value}',addedFavorite:'Added to favorites',removedFavorite:'Removed from favorites',favoriteError:'Failed to update favorites: {error}',filtersSaveError:'Failed to save filters',fallbackNotice:'Civitai search is overloaded, so fallback search is active. Scanned: {scanned}, matches: {total}.',noMoreModels:'There are no more new models.',repeatedModels:'Civitai is repeating the same results. No new cards were added.',retrying:'{error} Retrying automatically in 5 seconds…',loadModelsError:'Failed to load models: {error}',author:'Author',descriptionMissing:'No description available',versionsFiles:'Versions and files',modelFile:'Model file',download:'Download',noFiles:'No files available',downloadStarted:'Download started',loadingModel:'Loading model…',modelOpenError:'Failed to open model: {error}',modelDetailsError:'Failed to load model details: {error}',apiConfigured:'API key configured',apiMissing:'API key not configured',serverOnline:'Server online · {host}{version}',tokenSaved:'Stored permanently in .env: {token}',tokenMissing:'The key has not been saved yet',searchPlaceholder:'Find a model, LoRA, checkpoint… ({min}+ chars)',searchTooShort:'Enter at least {min} characters to search.',settingsSaved:'✓ Settings saved',settingsToast:'Settings saved',settingsError:'Error: {error}',initializationError:'Interface startup error: {error}',mediaLabel:'Media {number}',showAllVersions:'Show all versions ({count})',showLessVersions:'Show fewer versions',openOnCivitai:'Open on Civitai',switchLanguage:'Переключить на русский',byteB:'B',byteKB:'KB',byteMB:'MB',byteGB:'GB'
   }
 };
 const storedLocale=localStorage.getItem('civitai.language');
@@ -25,17 +25,41 @@ function applyTranslations(){
   $('#languageBtn').setAttribute('aria-label',t('switchLanguage'));
   $('#modalClose').setAttribute('aria-label',state.locale==='ru'?'Закрыть':'Close');
   $('#settingsClose').setAttribute('aria-label',state.locale==='ru'?'Закрыть':'Close');
+  $('#toggleToken').setAttribute('aria-label',t($('#apiToken').type==='password'?'showToken':'hideToken'));
   refreshSelectLabels();
   applyStatusText();
   updateViewText();
 }
 function toast(message,type='ok'){const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=message;$('#toasts').append(el);setTimeout(()=>el.remove(),3500)}
+let activeDialog=null;
+let dialogReturnFocus=null;
+function focusableIn(dialog){return [...dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el=>!el.closest('.hidden')&&el.offsetParent!==null)}
+function showDialog(dialog,preferredSelector){
+  if(!dialog)return;
+  if(dialog.classList.contains('hidden'))dialogReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  dialog.classList.remove('hidden');dialog.setAttribute('aria-hidden','false');activeDialog=dialog;document.body.classList.add('modal-open');
+  requestAnimationFrame(()=>{const preferred=preferredSelector?dialog.querySelector(preferredSelector):null;(preferred||focusableIn(dialog)[0])?.focus()});
+}
+function hideDialog(dialog){
+  if(!dialog)return;
+  dialog.classList.add('hidden');dialog.setAttribute('aria-hidden','true');
+  if(activeDialog===dialog)activeDialog=null;
+  if(!document.querySelector('.modal:not(.hidden)'))document.body.classList.remove('modal-open');
+  const restore=dialogReturnFocus;dialogReturnFocus=null;if(restore?.isConnected)restore.focus();
+}
+function trapDialogTab(event){
+  if(!activeDialog||event.key!=='Tab')return;
+  const focusable=focusableIn(activeDialog);if(!focusable.length){event.preventDefault();return}
+  const first=focusable[0],last=focusable[focusable.length-1];
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+}
 function fmt(value){if(!Number.isFinite(Number(value)))return '—';return Intl.NumberFormat(localeName(),{notation:'compact',maximumFractionDigits:1}).format(Number(value))}
 function formatBytes(bytes){const value=Number(bytes);if(!Number.isFinite(value)||value<=0)return '';const units=[t('byteB'),t('byteKB'),t('byteMB'),t('byteGB')];let n=value;let i=0;while(n>=1024&&i<units.length-1){n/=1024;i++}return `${Intl.NumberFormat(localeName(),{maximumFractionDigits:n>=100?0:n>=10?1:2}).format(n)} ${units[i]}`}
 function esc(value=''){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
 function modelTypeLabel(type=''){return type||'Model'}
 function modelBaseModel(model){return String(model?.baseModel||model?.baseModels?.[0]||(model?.modelVersions||[]).find(version=>String(version?.baseModel||'').trim())?.baseModel||'')}
-function plainText(html=''){const box=document.createElement('div');box.innerHTML=String(html);return String(box.textContent||box.innerText||'').replace(/\s+/g,' ').trim()}
+function plainText(value=''){return String(value??'').replace(/\s+/g,' ').trim()}
 async function api(url,opt={}){
   try{
     const headers=new Headers(opt.headers||{});
@@ -197,12 +221,14 @@ function cleanupMedia(root){
 }
 function card(model){
   const media=cover(model);
-  const favorite=state.favorites.has(Number(model.id));
+  const id=Number(model.id);
+  const favorite=state.favorites.has(id);
   const base=modelBaseModel(model);
+  const name=String(model.name||`Model ${id}`);
   const author=model.creator?.username||model.author||t('unknownAuthor');
   const downloads=model.stats?.downloadCount??model.downloads;
   const likes=model.stats?.favoriteCount??model.stats?.thumbsUpCount??model.likes;
-  return `<article class="card" data-id="${model.id}"><div class="thumb" data-open="${model.id}">${mediaHtml(media,{card:true})}<span class="badge">${esc(modelTypeLabel(model.type))}</span>${base?`<span class="base-badge" title="${esc(t('baseModelTitle',{value:base}))}">${esc(base)}</span>`:''}<button class="fav-btn ${favorite?'on':''}" data-fav="${model.id}" title="${esc(t('favorites'))}" aria-label="${esc(t('favorites'))}">♥</button></div><div class="card-body"><div class="card-title" title="${esc(model.name)}">${esc(model.name)}</div><div class="creator">${esc(author)}</div><div class="stats"><span>⇩ ${fmt(downloads)}</span><span>♥ ${fmt(likes)}</span></div></div></article>`;
+  return `<article class="card" data-id="${id}"><div class="thumb"><button class="thumb-open" type="button" data-open="${id}" aria-label="${esc(t('openModel',{name}))}">${mediaHtml(media,{card:true})}<span class="badge">${esc(modelTypeLabel(model.type))}</span>${base?`<span class="base-badge" title="${esc(t('baseModelTitle',{value:base}))}">${esc(base)}</span>`:''}</button><button class="fav-btn ${favorite?'on':''}" data-fav="${id}" title="${esc(t('favorites'))}" aria-label="${esc(t('favorites'))}" aria-pressed="${favorite?'true':'false'}">♥</button></div><div class="card-body"><div class="card-title" title="${esc(name)}">${esc(name)}</div><div class="creator">${esc(author)}</div><div class="stats"><span>⇩ ${fmt(downloads)}</span><span>♥ ${fmt(likes)}</span></div></div></article>`;
 }
 function render({append=false}={}){
   const grid=$('#grid');
@@ -259,7 +285,7 @@ function initGridEvents(){
     if(!open||open.contains(event.relatedTarget))return;
     const id=Number(open.dataset.open);
     clearTimeout(prefetchTimers.get(id));
-    prefetchTimers.set(id,setTimeout(()=>getModelDetail(id).catch(()=>{}),450));
+    prefetchTimers.set(id,setTimeout(()=>{prefetchTimers.delete(id);getModelDetail(id).catch(()=>{})},450));
   });
   grid.addEventListener('pointerout',event=>{
     const open=event.target.closest('[data-open]');
@@ -284,16 +310,32 @@ async function toggleFav(id){
     state.favorites=new Set(state.favoriteItems.map(item=>Number(item.id)));
     $('#favCount').textContent=state.favorites.size;
     toast(removing?t('removedFavorite'):t('addedFavorite'));
-    if(state.view==='favorites')render();else document.querySelectorAll(`[data-fav="${id}"]`).forEach(button=>button.classList.toggle('on',state.favorites.has(id)));
+    if(state.view==='favorites')render();else document.querySelectorAll(`[data-fav="${id}"]`).forEach(button=>{const on=state.favorites.has(id);button.classList.toggle('on',on);button.setAttribute('aria-pressed',on?'true':'false')});
   }catch(error){toast(t('favoriteError',{error:error.message}),'bad');dbg('error','Favorites',error)}finally{state.favoriteBusy.delete(id)}
 }
 function initCustomSelects(){
-  const closeAll=except=>document.querySelectorAll('.custom-select.open').forEach(el=>{if(el!==except)el.classList.remove('open')});
+  const setOpen=(box,open,focusOption=false)=>{
+    const trigger=box.querySelector('.select-trigger');
+    box.classList.toggle('open',open);trigger.setAttribute('aria-expanded',open?'true':'false');
+    if(open&&focusOption){const options=[...box.querySelectorAll('.select-menu button[data-value]')];(options.find(option=>option.classList.contains('selected'))||options[0])?.focus()}
+  };
+  const closeAll=except=>document.querySelectorAll('.custom-select.open').forEach(el=>{if(el!==except)setOpen(el,false)});
   document.querySelectorAll('.custom-select').forEach(box=>{
     const input=box.querySelector('input[type="hidden"]');
     const trigger=box.querySelector('.select-trigger');
-    trigger.onclick=event=>{event.stopPropagation();const open=!box.classList.contains('open');closeAll(box);box.classList.toggle('open',open)};
-    box.querySelectorAll('.select-menu button[data-value]').forEach(option=>option.onclick=event=>{event.stopPropagation();setCustomSelect(input.id,option.dataset.value,{silent:false});box.classList.remove('open')});
+    const options=[...box.querySelectorAll('.select-menu button[data-value]')];
+    trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+    trigger.onclick=event=>{event.stopPropagation();const open=!box.classList.contains('open');closeAll(box);setOpen(box,open)};
+    trigger.onkeydown=event=>{if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();closeAll(box);setOpen(box,true,true)}};
+    options.forEach((option,index)=>{
+      option.setAttribute('role','option');
+      option.onclick=event=>{event.stopPropagation();setCustomSelect(input.id,option.dataset.value,{silent:false});setOpen(box,false);trigger.focus()};
+      option.onkeydown=event=>{
+        if(event.key==='Escape'){event.preventDefault();setOpen(box,false);trigger.focus();return}
+        let next=index;if(event.key==='ArrowDown')next=Math.min(options.length-1,index+1);else if(event.key==='ArrowUp')next=Math.max(0,index-1);else if(event.key==='Home')next=0;else if(event.key==='End')next=options.length-1;else return;
+        event.preventDefault();options[next]?.focus();
+      };
+    });
   });
   document.addEventListener('click',()=>closeAll());
 }
@@ -305,7 +347,7 @@ function setCustomSelect(id,value,{silent=true}={}){
   const chosen=options.find(option=>option.dataset.value===String(value))||options[0];
   input.value=chosen?.dataset.value||'';
   box.querySelector('[data-select-label]').textContent=chosen?.textContent?.trim()||'';
-  options.forEach(option=>option.classList.toggle('selected',option===chosen));
+  options.forEach(option=>{const selected=option===chosen;option.classList.toggle('selected',selected);option.setAttribute('aria-selected',selected?'true':'false')});
   if(!silent)input.dispatchEvent(new Event('change',{bubbles:true}));
 }
 function refreshSelectLabels(){for(const id of ['typeFilter','baseModelFilter','sortFilter','periodFilter']){const input=$(`#${id}`);if(input)setCustomSelect(id,input.value,{silent:true})}}
@@ -437,7 +479,9 @@ async function loadModels({append=false,retryAttempt=0}={}){
 }
 
 function versionHtml(version){
-  const files=(version.files||[]).map(file=>`<div class="file"><div class="file-info"><b>${esc(file.name||t('modelFile'))}</b><small>${file.sizeKB?formatBytes(file.sizeKB*1024):''} ${esc(file.metadata?.format||'')}</small></div><a class="download-btn" href="/api/download/${version.id}?fileId=${encodeURIComponent(file.id||'')}" data-download="${version.id}" data-name="${esc(file.name||'')}">⇩ ${t('download')}</a></div>`).join('')||`<small>${t('noFiles')}</small>`;
+  const versionId=Number(version.id);
+  const safeVersionId=Number.isSafeInteger(versionId)&&versionId>0?String(versionId):'';
+  const files=safeVersionId?(version.files||[]).map(file=>`<div class="file"><div class="file-info"><b>${esc(file.name||t('modelFile'))}</b><small>${file.sizeKB?formatBytes(file.sizeKB*1024):''} ${esc(file.metadata?.format||'')}</small></div><a class="download-btn" href="/api/download/${encodeURIComponent(safeVersionId)}?fileId=${encodeURIComponent(file.id||'')}" data-download="${esc(safeVersionId)}" data-name="${esc(file.name||'')}">⇩ ${t('download')}</a></div>`).join(''):`<small>${t('noFiles')}</small>`;
   const date=version.publishedAt?new Date(version.publishedAt).toLocaleDateString(localeName()):'';
   return `<div class="version"><div class="version-head"><div><b>${esc(version.name||'')}</b><br><small>${esc(version.baseModel||'')}${date?` · ${date}`:''}</small></div><small>#${esc(version.id||'')}</small></div><div class="files">${files}</div></div>`;
 }
@@ -451,7 +495,7 @@ function renderModelDetails(model){
   const visibleVersions=state.showAllVersions?versions:versions.slice(0,limit);
   const toggle=versions.length>limit?`<button id="versionToggle" class="ghost full detail-more" type="button">${state.showAllVersions?t('showLessVersions'):t('showAllVersions',{count:versions.length})}</button>`:'';
   const description=plainText(model.description||'').slice(0,900)||t('descriptionMissing');
-  $('#modalContent').innerHTML=`<div class="details">${mediaPanel}<div class="details-info"><div class="detail-badges"><span class="detail-pill">${esc(modelTypeLabel(model.type))}</span>${bases.slice(0,3).map(base=>`<span class="detail-pill base">${esc(base)}</span>`).join('')}</div><h2>${esc(model.name)}</h2><div class="meta">${t('author')}: ${esc(model.creator?.username||'—')} · ID ${model.id}</div><a class="model-page-link" href="https://civitai.red/models/${encodeURIComponent(model.id)}" target="_blank" rel="noopener noreferrer">${esc(t('openOnCivitai'))} ↗</a><p class="muted">${esc(description)}</p><h3>${t('versionsFiles')}</h3>${visibleVersions.map(versionHtml).join('')}${toggle}</div></div>`;
+  $('#modalContent').innerHTML=`<div class="details">${mediaPanel}<div class="details-info"><div class="detail-badges"><span class="detail-pill">${esc(modelTypeLabel(model.type))}</span>${bases.slice(0,3).map(base=>`<span class="detail-pill base">${esc(base)}</span>`).join('')}</div><h2>${esc(model.name)}</h2><div class="meta">${t('author')}: ${esc(model.creator?.username||'—')} · ID ${esc(model.id)}</div><a class="model-page-link" href="https://civitai.red/models/${encodeURIComponent(model.id)}" target="_blank" rel="noopener noreferrer">${esc(t('openOnCivitai'))} ↗</a><p class="muted">${esc(description)}</p><h3>${t('versionsFiles')}</h3>${visibleVersions.map(versionHtml).join('')}${toggle}</div></div>`;
   bindMediaPlayback($('#modalContent'));
   $('#modalContent').querySelectorAll('[data-media-index]').forEach(button=>button.onclick=()=>{
     const index=Number(button.dataset.mediaIndex);
@@ -469,7 +513,7 @@ function closeModelModal(){
   state.openModelId=null;
   state.showAllVersions=false;
   cleanupMedia($('#modalContent'));
-  $('#modal').classList.add('hidden');
+  hideDialog($('#modal'));
   $('#modalContent').innerHTML='';
 }
 async function openModel(id){
@@ -478,7 +522,7 @@ async function openModel(id){
   state.showAllVersions=false;
   const summary=findModelById(id);
   const summaryMedia=cover(summary);
-  $('#modal').classList.remove('hidden');
+  showDialog($('#modal'),'#modalClose');
   $('#modalContent').innerHTML=`<div class="details"><div class="details-media-wrap"><div class="details-media">${mediaHtml(summaryMedia,{autoplay:summaryMedia?.kind==='video',label:false})}</div></div><div class="details-info details-loading"><div class="detail-badges">${summary?.type?`<span class="detail-pill">${esc(modelTypeLabel(summary.type))}</span>`:''}${modelBaseModel(summary)?`<span class="detail-pill base">${esc(modelBaseModel(summary))}</span>`:''}</div><h2>${esc(summary?.name||t('loadingModel'))}</h2><div class="meta">${(summary?.creator?.username||summary?.author)?`${t('author')}: ${esc(summary?.creator?.username||summary?.author)} · `:''}ID ${id}</div><div class="detail-skeleton"><i></i><i></i><i></i><i></i></div></div></div>`;
   bindMediaPlayback($('#modalContent'));
   try{
@@ -514,7 +558,7 @@ function updateViewText(){
 }
 function setView(view){
   state.view=view;
-  document.querySelectorAll('.nav').forEach(nav=>nav.classList.toggle('active',nav.dataset.view===view));
+  document.querySelectorAll('.nav').forEach(nav=>{const active=nav.dataset.view===view;nav.classList.toggle('active',active);nav.setAttribute('aria-pressed',active?'true':'false')});
   $('#errorBox').classList.add('hidden');$('#errorBox').classList.remove('notice');
   updateViewText();
   render();
@@ -559,18 +603,24 @@ function initEvents(){
   document.querySelectorAll('.nav').forEach(nav=>nav.onclick=()=>setView(nav.dataset.view));
   $('#modalClose').onclick=closeModelModal;
   $('#modal').onclick=event=>{if(event.target.id==='modal')closeModelModal()};
-  $('#settingsBtn').onclick=()=>$('#settingsModal').classList.remove('hidden');
-  $('#settingsClose').onclick=()=>$('#settingsModal').classList.add('hidden');
-  $('#settingsModal').onclick=event=>{if(event.target.id==='settingsModal')$('#settingsModal').classList.add('hidden')};
-  $('#toggleToken').onclick=()=>{$('#apiToken').type=$('#apiToken').type==='password'?'text':'password'};
+  $('#settingsBtn').onclick=()=>showDialog($('#settingsModal'),'#apiToken');
+  $('#settingsClose').onclick=()=>hideDialog($('#settingsModal'));
+  $('#settingsModal').onclick=event=>{if(event.target.id==='settingsModal')hideDialog($('#settingsModal'))};
+  $('#toggleToken').onclick=()=>{const input=$('#apiToken');input.type=input.type==='password'?'text':'password';$('#toggleToken').setAttribute('aria-label',t(input.type==='password'?'showToken':'hideToken'))};
   $('#languageBtn').onclick=switchLanguage;
   $('#saveSettings').onclick=async()=>{
+    const button=$('#saveSettings');if(button.disabled)return;button.disabled=true;
     try{
       const output=await api('/api/settings',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({apiToken:$('#apiToken').value.trim(),language:state.locale})});
-      state.settings=output.settings;applyStatus(output.status);$('#apiToken').value='';$('#settingsMsg').textContent=t('settingsSaved');toast(t('settingsToast'));setTimeout(()=>$('#settingsModal').classList.add('hidden'),650);
+      state.settings=output.settings;applyStatus(output.status);$('#apiToken').value='';$('#settingsMsg').textContent=t('settingsSaved');toast(t('settingsToast'));setTimeout(()=>hideDialog($('#settingsModal')),650);
     }catch(error){$('#settingsMsg').textContent=t('settingsError',{error:error.message});toast(error.message,'bad')}
+    finally{button.disabled=false}
   };
-  document.addEventListener('keydown',event=>{if(event.key!=='Escape')return;if(!$('#modal').classList.contains('hidden'))closeModelModal();else if(!$('#settingsModal').classList.contains('hidden'))$('#settingsModal').classList.add('hidden')});
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Tab')trapDialogTab(event);
+    if(event.key!=='Escape')return;
+    if(!$('#modal').classList.contains('hidden'))closeModelModal();else if(!$('#settingsModal').classList.contains('hidden'))hideDialog($('#settingsModal'));
+  });
 }
 document.addEventListener('DOMContentLoaded',async()=>{
   applyTranslations();

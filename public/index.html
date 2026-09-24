@@ -18,7 +18,7 @@
     </a>
     <div class="search-wrap">
       <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg></span>
-      <input id="search" autocomplete="off" spellcheck="false">
+      <input id="search" type="search" autocomplete="off" enterkeyhint="search" spellcheck="false" data-i18n-aria="search">
       <kbd>Enter</kbd>
     </div>
     <div class="header-actions">
@@ -41,7 +41,7 @@
         <label class="label" data-i18n="modelType">Тип модели</label>
         <div class="custom-select" data-select-for="typeFilter">
           <input id="typeFilter" type="hidden" value="">
-          <button class="select-trigger" type="button"><span data-select-label></span><i></i></button>
+          <button class="select-trigger" type="button" data-i18n-aria="modelType"><span data-select-label></span><i></i></button>
           <div class="select-menu" role="listbox">
             <button type="button" data-value="" data-i18n="allTypes">Все типы</button>
             <button type="button" data-value="Checkpoint">Checkpoint</button>
@@ -61,7 +61,7 @@
         <label class="label" data-i18n="baseModel">Базовая модель</label>
         <div class="custom-select" data-select-for="baseModelFilter">
           <input id="baseModelFilter" type="hidden" value="">
-          <button class="select-trigger" type="button"><span data-select-label></span><i></i></button>
+          <button class="select-trigger" type="button" data-i18n-aria="baseModel"><span data-select-label></span><i></i></button>
           <div class="select-menu tall" role="listbox">
             <button type="button" data-value="" data-i18n="allBaseModels">Все базовые модели</button>
             <div class="select-group">Stable Diffusion</div>
@@ -102,7 +102,7 @@
         <label class="label" data-i18n="sorting">Сортировка</label>
         <div class="custom-select" data-select-for="sortFilter">
           <input id="sortFilter" type="hidden" value="Highest Rated">
-          <button class="select-trigger" type="button"><span data-select-label></span><i></i></button>
+          <button class="select-trigger" type="button" data-i18n-aria="sorting"><span data-select-label></span><i></i></button>
           <div class="select-menu" role="listbox">
             <button type="button" data-value="Highest Rated" data-i18n="sortRated">Самые высоко оценённые</button>
             <button type="button" data-value="Most Downloaded" data-i18n="sortDownloaded">Самые скачиваемые</button>
@@ -112,7 +112,7 @@
         <label class="label" data-i18n="period">Период</label>
         <div class="custom-select" data-select-for="periodFilter">
           <input id="periodFilter" type="hidden" value="AllTime">
-          <button class="select-trigger" type="button"><span data-select-label></span><i></i></button>
+          <button class="select-trigger" type="button" data-i18n-aria="period"><span data-select-label></span><i></i></button>
           <div class="select-menu" role="listbox">
             <button type="button" data-value="AllTime" data-i18n="periodAll">За всё время</button>
             <button type="button" data-value="Year" data-i18n="periodYear">За год</button>
@@ -133,16 +133,16 @@
         <div class="toolbar-title"><span class="section-kicker" data-i18n="catalog">КАТАЛОГ</span><div class="title-row"><h2 id="viewTitle"></h2><span class="result-pill"><strong id="resultCount">—</strong><span data-i18n="results">результатов</span></span></div><p id="viewSubtitle"></p></div>
         <button id="refreshBtn" class="ghost refresh-btn">↻ <span data-i18n="refresh">Обновить</span></button>
       </div>
-      <div id="loading" class="loading hidden"><div></div><span data-i18n="loading">Получаем данные Civitai…</span></div>
-      <div id="errorBox" class="error hidden"></div>
+      <div id="loading" class="loading hidden" role="status" aria-live="polite"><div></div><span data-i18n="loading">Получаем данные Civitai…</span></div>
+      <div id="errorBox" class="error hidden" role="alert"></div>
       <section id="grid" class="grid"></section>
       <div id="empty" class="empty hidden"><div>◌</div><h3 data-i18n="emptyTitle">Здесь пока пусто</h3><p data-i18n="emptyText">Попробуй изменить запрос или фильтры.</p></div>
       <button id="loadMore" class="load-more hidden"><span data-i18n="loadMore">Показать ещё</span> <span>↓</span></button>
     </main>
   </div>
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card panel"><button class="modal-close" id="modalClose" type="button" aria-label="Close">×</button><div id="modalContent"></div></div></div>
-  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card settings panel"><button class="modal-close" id="settingsClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="system">СИСТЕМА</span><h2 data-i18n="settings">Настройки</h2><p class="muted" data-i18n="tokenDescription">API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.</p><label data-i18n="apiToken">API-ключ Civitai</label><div class="token-row"><input id="apiToken" type="password" data-i18n-placeholder="tokenPlaceholder"><button id="toggleToken" class="icon-btn" type="button">◉</button></div><small id="tokenHint"></small><button id="saveSettings" class="primary full" type="button" data-i18n="saveSettings">Сохранить настройки</button><div id="settingsMsg" class="settings-msg"></div></div></div>
-  <div id="toasts" class="toasts"></div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" data-i18n-aria="modelDetails"><div class="modal-card panel"><button class="modal-close" id="modalClose" type="button" aria-label="Close">×</button><div id="modalContent"></div></div></div>
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settingsTitle"><div class="modal-card settings panel"><button class="modal-close" id="settingsClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="system">СИСТЕМА</span><h2 id="settingsTitle" data-i18n="settings">Настройки</h2><p class="muted" data-i18n="tokenDescription">API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.</p><label for="apiToken" data-i18n="apiToken">API-ключ Civitai</label><div class="token-row"><input id="apiToken" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="tokenPlaceholder"><button id="toggleToken" class="icon-btn" type="button" data-i18n-aria="showToken">◉</button></div><small id="tokenHint"></small><button id="saveSettings" class="primary full" type="button" data-i18n="saveSettings">Сохранить настройки</button><div id="settingsMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
   <script src="/app.js?v=1.3.1" defer></script>
 </body>
 </html>
