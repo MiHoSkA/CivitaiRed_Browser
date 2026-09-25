@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark">
   <title>Civitai Red Browser</title>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.3.1">
+  <link rel="stylesheet" href="/style.css?v=1.8.1">
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="grain"></div>
@@ -22,6 +22,16 @@
       <kbd>Enter</kbd>
     </div>
     <div class="header-actions">
+      <div class="account-wrap">
+        <button id="accountBtn" class="account-pill hidden" type="button" aria-haspopup="true" aria-expanded="false"><img id="accountAvatar" class="account-avatar hidden" alt=""><span id="accountName" class="account-name"></span><span class="buzz-chip"><i aria-hidden="true">⚡</i><b id="buzzTotal">—</b></span></button>
+        <div id="accountMenu" class="account-menu panel hidden" role="dialog" aria-labelledby="accountMenuTitle">
+          <div class="account-menu-head"><b id="accountMenuTitle"></b><small id="accountMenuStatus"></small></div>
+          <div class="buzz-title" data-i18n="buzzBalance">Баланс Buzz</div>
+          <div id="buzzBreakdown" class="buzz-breakdown"></div>
+          <div class="account-menu-actions"><button id="accountRefresh" class="ghost" type="button" data-i18n="refresh">Обновить</button><a id="accountProfileLink" class="ghost" href="https://civitai.red" target="_blank" rel="noopener noreferrer" data-i18n="openProfile">Профиль на Civitai</a></div>
+        </div>
+      </div>
+      <button id="lockBtn" class="icon-btn lock-btn hidden" type="button" aria-pressed="false"><span class="lock-icon" aria-hidden="true"></span></button>
       <button id="languageBtn" class="icon-btn lang-btn" type="button">EN</button>
       <button id="settingsBtn" class="icon-btn" type="button" data-i18n-title="settings" data-i18n-aria="settings">⚙</button>
     </div>
@@ -33,6 +43,8 @@
         <nav>
           <button class="nav active" data-view="discover"><span class="nav-icon">✦</span><span data-i18n="discover">Обзор</span></button>
           <button class="nav" data-view="favorites"><span class="nav-icon">♥</span><span data-i18n="favorites">Избранное</span><em id="favCount">0</em></button>
+          <button class="nav" data-view="collections"><span class="nav-icon">▦</span><span data-i18n="collections">Коллекции</span><em id="collectionCount" class="hidden">0</em></button>
+          <button class="nav" data-view="mine"><span class="nav-icon">◧</span><span data-i18n="myContent">Мой контент</span></button>
         </nav>
       </div>
       <div class="divider"></div>
@@ -133,16 +145,19 @@
         <div class="toolbar-title"><span class="section-kicker" data-i18n="catalog">КАТАЛОГ</span><div class="title-row"><h2 id="viewTitle"></h2><span class="result-pill"><strong id="resultCount">—</strong><span data-i18n="results">результатов</span></span></div><p id="viewSubtitle"></p></div>
         <button id="refreshBtn" class="ghost refresh-btn">↻ <span data-i18n="refresh">Обновить</span></button>
       </div>
+      <div id="subnav" class="subnav hidden" role="tablist"></div>
       <div id="loading" class="loading hidden" role="status" aria-live="polite"><div></div><span data-i18n="loading">Получаем данные Civitai…</span></div>
       <div id="errorBox" class="error hidden" role="alert"></div>
       <section id="grid" class="grid"></section>
-      <div id="empty" class="empty hidden"><div>◌</div><h3 data-i18n="emptyTitle">Здесь пока пусто</h3><p data-i18n="emptyText">Попробуй изменить запрос или фильтры.</p></div>
+      <div id="empty" class="empty hidden"><div>◌</div><h3 id="emptyTitle" data-i18n="emptyTitle">Здесь пока пусто</h3><p id="emptyText" data-i18n="emptyText">Попробуй изменить запрос или фильтры.</p><button id="emptyAction" class="ghost hidden" type="button" data-i18n="openSettings">Открыть настройки</button></div>
       <button id="loadMore" class="load-more hidden"><span data-i18n="loadMore">Показать ещё</span> <span>↓</span></button>
     </main>
   </div>
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" data-i18n-aria="modelDetails"><div class="modal-card panel"><button class="modal-close" id="modalClose" type="button" aria-label="Close">×</button><div id="modalContent"></div></div></div>
-  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settingsTitle"><div class="modal-card settings panel"><button class="modal-close" id="settingsClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="system">СИСТЕМА</span><h2 id="settingsTitle" data-i18n="settings">Настройки</h2><p class="muted" data-i18n="tokenDescription">API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.</p><label for="apiToken" data-i18n="apiToken">API-ключ Civitai</label><div class="token-row"><input id="apiToken" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="tokenPlaceholder"><button id="toggleToken" class="icon-btn" type="button" data-i18n-aria="showToken">◉</button></div><small id="tokenHint"></small><button id="saveSettings" class="primary full" type="button" data-i18n="saveSettings">Сохранить настройки</button><div id="settingsMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settingsTitle"><div class="modal-card settings panel"><button class="modal-close" id="settingsClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="system">СИСТЕМА</span><h2 id="settingsTitle" data-i18n="settings">Настройки</h2><div id="tokenSection"><p class="muted" data-i18n="tokenDescription">API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.</p><label for="apiToken" data-i18n="apiToken">API-ключ Civitai</label><div class="token-row"><input id="apiToken" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="tokenPlaceholder"><button id="toggleToken" class="icon-btn" type="button" data-i18n-aria="showToken">◉</button></div><div class="token-meta"><small id="tokenHint"></small><button id="clearToken" class="link-btn hidden" type="button" data-i18n="removeToken">Удалить ключ</button></div><button id="saveSettings" class="primary full" type="button" data-i18n="saveSettings">Сохранить настройки</button><div id="settingsMsg" class="settings-msg" role="status" aria-live="polite"></div></div><div id="lockSection" class="lock-section"><h3 data-i18n="privateMode">Приватный режим</h3><p id="lockDescription" class="muted"></p><div id="lockUnlockForm" class="lock-form hidden"><label for="lockPassword" data-i18n="lockPasswordLabel">Пароль</label><div class="lock-row"><input id="lockPassword" type="password" autocomplete="current-password" maxlength="200"><button id="lockUnlock" class="primary" type="button" data-i18n="unlock">Разблокировать</button></div></div><div id="lockManageForm" class="lock-form hidden"><div id="lockCurrentWrap"><label for="lockCurrent" data-i18n="lockCurrentLabel">Текущий пароль</label><input id="lockCurrent" type="password" autocomplete="current-password" maxlength="200"></div><label for="lockNew" data-i18n="lockNewLabel">Новый пароль</label><input id="lockNew" type="password" autocomplete="new-password" maxlength="200"><label for="lockRepeat" data-i18n="lockRepeatLabel">Повтори пароль</label><input id="lockRepeat" type="password" autocomplete="new-password" maxlength="200"><div class="lock-actions"><button id="lockSave" class="primary" type="button"></button><button id="lockNow" class="ghost hidden" type="button" data-i18n="lockNow">Заблокировать сейчас</button><button id="lockRemove" class="danger-btn hidden" type="button" data-i18n="lockRemove">Удалить пароль</button></div></div><div id="lockMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div></div>
+  <div id="publishModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="publishTitle"><div class="modal-card publish panel"><button class="modal-close" id="publishClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="myContent">Мой контент</span><h2 id="publishTitle" data-i18n="newPost">Новая публикация</h2><div id="dropZone" class="drop-zone" role="button" tabindex="0"><input id="publishFiles" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime" multiple hidden><span class="drop-icon" aria-hidden="true">⇪</span><b data-i18n="dropFiles">Перетащи файлы сюда или нажми, чтобы выбрать</b><small data-i18n="dropHint">Изображения до 50 МБ, видео до 750 МБ, до 20 файлов</small></div><div id="publishList" class="publish-list"></div><label for="publishTitleInput" data-i18n="postTitle">Название</label><input id="publishTitleInput" type="text" maxlength="255" autocomplete="off" data-i18n-placeholder="postTitlePlaceholder"><label for="publishDetail" data-i18n="postDescription">Описание</label><textarea id="publishDetail" maxlength="5000" rows="3" data-i18n-placeholder="postDescriptionPlaceholder"></textarea><div class="publish-actions"><button id="publishSubmit" class="primary" type="button" data-i18n="publishNow">Опубликовать</button></div><div id="publishMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
+  <div id="collectModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="collectTitle"><div class="modal-card collect panel"><button class="modal-close" id="collectClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="collections">Коллекции</span><h2 id="collectTitle" data-i18n="addToCollection">Добавить в коллекцию</h2><p id="collectSubtitle" class="muted collect-subtitle"></p><div id="collectList" class="collect-list" role="group"></div><div class="collect-new"><label for="collectName" data-i18n="newCollection">Новая коллекция</label><div class="collect-new-row"><input id="collectName" type="text" maxlength="30" autocomplete="off" data-i18n-placeholder="collectionNamePlaceholder"><div class="collect-privacy" role="radiogroup"><button type="button" class="privacy-chip active" data-read="Private" data-i18n="privacyPrivate">Приватная</button><button type="button" class="privacy-chip" data-read="Unlisted" data-i18n="privacyUnlisted">По ссылке</button><button type="button" class="privacy-chip" data-read="Public" data-i18n="privacyPublic">Публичная</button></div><button id="collectCreate" class="primary" type="button" data-i18n="createAndAdd">Создать и добавить</button></div></div><div id="collectMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
   <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
-  <script src="/app.js?v=1.3.1" defer></script>
+  <script src="/app.js?v=1.8.0" defer></script>
 </body>
 </html>
