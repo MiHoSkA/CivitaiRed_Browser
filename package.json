@@ -1,6 +1,6 @@
 {
   "name": "civitai-red-browser",
-  "version": "1.8.0",
+  "version": "1.8.3",
   "private": true,
   "description": "Fast bilingual web client for Civitai.red",
   "main": "server.js",

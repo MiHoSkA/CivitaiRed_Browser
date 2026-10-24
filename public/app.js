@@ -1,9 +1,11 @@
 const $=selector=>document.querySelector(selector);
 const I18N={
   ru:{
+    publishFinalizing:'Civitai создаёт публикацию. Дождись результата перед закрытием окна.',
     home:'Главная',search:'Поиск',settings:'Настройки',modelDetails:'Подробности модели',showToken:'Показать API-ключ',hideToken:'Скрыть API-ключ',openModel:'Открыть модель {name}',navigation:'Навигация',discover:'Обзор',favorites:'Избранное',filters:'Фильтры',modelType:'Тип модели',allTypes:'Все типы',baseModel:'Базовая модель',allBaseModels:'Все базовые модели',groupSdxl:'SDXL-экосистема',groupFlux:'Flux и новые',groupVideo:'Видео',other:'Другое',sorting:'Сортировка',sortRated:'Самые высоко оценённые',sortDownloaded:'Самые скачиваемые',sortNewest:'Самые новые',period:'Период',periodAll:'За всё время',periodYear:'За год',periodMonth:'За месяц',periodWeek:'За неделю',periodDay:'За день',resetFilters:'Сбросить фильтры',apiChecking:'Проверка API…',serverConnected:'Сервер подключён',catalog:'КАТАЛОГ',results:'результатов',refresh:'Обновить',loading:'Получаем данные Civitai…',emptyTitle:'Здесь пока пусто',emptyText:'Попробуй изменить запрос или фильтры.',loadMore:'Показать ещё',system:'СИСТЕМА',tokenDescription:'API-ключ хранится постоянно на сервере в .env, не имеет таймера удаления и не передаётся интерфейсу.',apiToken:'API-ключ Civitai',tokenPlaceholder:'Введите API key',saveSettings:'Сохранить настройки',discoverTitle:'Популярные модели',discoverSubtitle:'Обновляется только вручную',favoritesTitle:'Избранное',favoritesSubtitle:'Сохранённые модели',image:'ИЗОБРАЖЕНИЕ',video:'ВИДЕО',unknownAuthor:'Неизвестный автор',baseModelTitle:'Базовая модель: {value}',addedFavorite:'Добавлено в избранное',removedFavorite:'Удалено из избранного',favoriteError:'Не удалось изменить избранное: {error}',filtersSaveError:'Не удалось сохранить фильтры',fallbackNotice:'Поиск Civitai сейчас перегружен — включён резервный поиск. Проверено моделей: {scanned}, найдено совпадений: {total}.',noMoreModels:'Новых моделей больше нет.',repeatedModels:'Civitai сейчас повторяет одну и ту же выдачу. Новые карточки не добавлены.',retrying:'{error} Автоматический повтор через {seconds} с…',loadModelsError:'Не удалось получить модели: {error}',author:'Автор',descriptionMissing:'Описание отсутствует',versionsFiles:'Версии и файлы',modelFile:'Файл модели',download:'Скачать',noFiles:'Нет доступных файлов',downloadStarted:'Загрузка началась',loadingModel:'Загрузка модели…',modelOpenError:'Не удалось открыть модель: {error}',modelDetailsError:'Не удалось загрузить подробности модели: {error}',apiConfigured:'API-ключ настроен',apiMissing:'API-ключ не задан',serverOnline:'Сервер онлайн · {host}{version}',tokenSaved:'Сохранён постоянно в .env: {token}',tokenMissing:'Ключ пока не сохранён',searchPlaceholder:'Найти модель, LoRA, checkpoint… (от {min} симв.)',searchTooShort:'Для поиска введи минимум {min} символа.',settingsSaved:'✓ Настройки сохранены',settingsToast:'Настройки сохранены',settingsError:'Ошибка: {error}',initializationError:'Ошибка запуска интерфейса: {error}',mediaLabel:'Медиа {number}',showAllVersions:'Показать все версии ({count})',showLessVersions:'Свернуть список версий',openOnCivitai:'Открыть на Civitai',switchLanguage:'Switch to English',byteB:'Б',byteKB:'КБ',byteMB:'МБ',byteGB:'ГБ',removeToken:'Удалить ключ',confirmRemoveToken:'Удалить сохранённый API-ключ из .env?',tokenRemoved:'API-ключ удалён',privateMode:'Приватный режим',lockPasswordLabel:'Пароль',lockCurrentLabel:'Текущий пароль',lockNewLabel:'Новый пароль',lockRepeatLabel:'Повтори пароль',unlock:'Разблокировать',lockSet:'Установить пароль',lockChange:'Сменить пароль',lockNow:'Заблокировать сейчас',lockRemove:'Удалить пароль',lockDescriptionOff:'Пароль не задан. Если его установить, без ввода пароля будут доступны только просмотр и скачивание моделей без контента 18+, а коллекции, свой контент, избранное, Buzz и API-ключ будут скрыты.',lockDescriptionOn:'Пароль установлен, приватный режим сейчас выключен. Можно сменить пароль, удалить его или сразу заблокировать доступ.',lockDescriptionLocked:'Включён приватный режим: доступны только просмотр и скачивание моделей без контента 18+. Введи пароль, чтобы вернуть полный доступ.',lockEnterPassword:'Введи пароль',lockEnterCurrent:'Введи текущий пароль',lockRules:'Пароль должен быть от 4 до 200 символов',lockMismatch:'Пароли не совпадают',lockSetDone:'Пароль установлен',lockChanged:'Пароль изменён',lockRemoved:'Пароль удалён, приватный режим отключён',lockRemoveConfirm:'Удалить пароль? Приватный режим будет полностью отключён.',unlocked:'Полный доступ открыт',lockedNow:'Приватный режим включён',lockThrottled:'Слишком много попыток. Повтори через {seconds} с.',unlockHint:'Приватный режим — ввести пароль',lockNowHint:'Заблокировать (включить приватный режим)',collections:'Коллекции',myContent:'Мой контент',collectionsTitle:'Мои коллекции',collectionsSubtitle:'Коллекции из аккаунта Civitai',mineTitle:'Мой контент',mineSubtitle:'Медиа и публикации аккаунта',tabMedia:'Медиа',tabPosts:'Публикации',buzzBalance:'Баланс Buzz',buzzTotal:'Всего',buzzBlue:'Синий',buzzYellow:'Жёлтый',buzzGreen:'Зелёный',buzzRed:'Красный',buzzUnavailable:'Buzz недоступен: {error}',openProfile:'Профиль на Civitai',openSettings:'Открыть настройки',accountNeedsToken:'Нужен API-ключ',accountNeedsTokenText:'Сохрани API-ключ Civitai в настройках, чтобы видеть свои коллекции, медиа и публикации.',noPermissionTitle:'Нет разрешения',noPermissionText:'У этого API-ключа нет разрешения на эти данные. Создай на Civitai ключ с нужными правами.',accountLoadError:'Не удалось загрузить данные аккаунта: {error}',noCollections:'Коллекций пока нет',collectionEmpty:'В этой коллекции пока ничего нет',noMedia:'Медиа пока нет',noPosts:'Публикаций пока нет',typeModel:'Модели',typeImage:'Изображения',typePost:'Публикации',typeArticle:'Статьи',privateCollection:'Приватная',bookmark:'Закладки',untitledPost:'Публикация без названия',imagesCount:'{count} медиа',generationData:'Данные генерации',prompt:'Промпт',negativePrompt:'Негативный промпт',resources:'Ресурсы',sampler:'Сэмплер',steps:'Шаги',cfg:'CFG',seed:'Seed',size:'Размер',noGenerationData:'Данные генерации не указаны',copy:'Копировать',copied:'Скопировано',openImage:'Открыть медиа',openPost:'Открыть публикацию',postImages:'Медиа публикации',published:'Опубликовано',reactions:'Реакции',comments:'Комментарии',accountStatus:'Статус: {status}',member:'Подписчик',signedInAs:'Аккаунт: {name}',openOriginal:'Открыть оригинал',newPost:'Новая публикация',publishNew:'Опубликовать',dropFiles:'Перетащи файлы сюда или нажми, чтобы выбрать',dropHint:'Изображения до 50 МБ, видео до 750 МБ, до 20 файлов',postTitle:'Название',postTitlePlaceholder:'Необязательно',postDescription:'Описание',postDescriptionPlaceholder:'Необязательно',publishNow:'Опубликовать',publishing:'Публикация…',uploadingFile:'Загрузка {name}…',fileReady:'Готов',fileUploaded:'Загружен',fileError:'Ошибка',removeFile:'Убрать файл',fileTypeError:'{name}: неподдерживаемый тип файла',fileSizeError:'{name}: файл больше {max} МБ',tooManyFiles:'Можно добавить не больше {max} файлов',noFilesSelected:'Добавь хотя бы один файл',publishSuccess:'Публикация создана. Civitai обрабатывает медиа — она появится в списке через минуту.',publishError:'Не удалось опубликовать: {error}',confirmClosePublish:'Загрузка ещё идёт. Закрыть окно и прервать её?',deleteImage:'Удалить медиа',deletePost:'Удалить публикацию',confirmDeleteImage:'Удалить это медиа с Civitai безвозвратно?',confirmDeletePost:'Удалить эту публикацию и всё её медиа с Civitai безвозвратно?',imageDeleted:'Медиа удалено',postDeleted:'Публикация удалена',deleteError:'Не удалось удалить: {error}',noWritePermission:'У API-ключа нет разрешения на публикацию (Media Write).',noDeletePermission:'У API-ключа нет разрешения на удаление (Media Delete).',retry:'Повторить',metaFound:'Найдены данные генерации',rateLimited:'Civitai временно ограничил частоту запросов. Повтори через {seconds} с.',connectionLost:'Соединение с сервером прервано',addToCollection:'Добавить в коллекцию',toCollection:'В коллекцию',newCollection:'Новая коллекция',collectionNamePlaceholder:'Название, до 30 символов',privacyPrivate:'Приватная',privacyUnlisted:'По ссылке',privacyPublic:'Публичная',createAndAdd:'Создать и добавить',noCollectionsOfType:'У тебя пока нет коллекций для типа «{type}». Создай новую ниже.',addedToCollection:'Добавлено в «{name}»',removedFromCollection:'Убрано из «{name}»',collectionCreated:'Коллекция «{name}» создана',collectionError:'Не удалось изменить коллекцию: {error}',removeFromCollection:'Убрать из коллекции',cannotRemove:'Этот элемент добавил другой участник — убрать его может только он',noCollectionPermission:'У API-ключа нет разрешения на изменение коллекций (Collections Write).',collectionNameRequired:'Укажи название коллекции'
   },
   en:{
+    publishFinalizing:'Civitai is creating the post. Wait for the result before closing this window.',
     home:'Home',search:'Search',settings:'Settings',modelDetails:'Model details',showToken:'Show API key',hideToken:'Hide API key',openModel:'Open model {name}',navigation:'Navigation',discover:'Discover',favorites:'Favorites',filters:'Filters',modelType:'Model type',allTypes:'All types',baseModel:'Base model',allBaseModels:'All base models',groupSdxl:'SDXL ecosystem',groupFlux:'Flux and newer',groupVideo:'Video',other:'Other',sorting:'Sort',sortRated:'Highest rated',sortDownloaded:'Most downloaded',sortNewest:'Newest',period:'Period',periodAll:'All time',periodYear:'Year',periodMonth:'Month',periodWeek:'Week',periodDay:'Day',resetFilters:'Reset filters',apiChecking:'Checking API…',serverConnected:'Server connected',catalog:'CATALOG',results:'results',refresh:'Refresh',loading:'Loading Civitai data…',emptyTitle:'Nothing here yet',emptyText:'Try changing your search or filters.',loadMore:'Show more',system:'SYSTEM',tokenDescription:'The API key is stored permanently on the server in .env, has no deletion timer, and is never exposed to the interface.',apiToken:'Civitai API key',tokenPlaceholder:'Enter API key',saveSettings:'Save settings',discoverTitle:'Popular models',discoverSubtitle:'Updates only when requested',favoritesTitle:'Favorites',favoritesSubtitle:'Saved models',image:'IMAGE',video:'VIDEO',unknownAuthor:'Unknown author',baseModelTitle:'Base model: {value}',addedFavorite:'Added to favorites',removedFavorite:'Removed from favorites',favoriteError:'Failed to update favorites: {error}',filtersSaveError:'Failed to save filters',fallbackNotice:'Civitai search is overloaded, so fallback search is active. Scanned: {scanned}, matches: {total}.',noMoreModels:'There are no more new models.',repeatedModels:'Civitai is repeating the same results. No new cards were added.',retrying:'{error} Retrying automatically in {seconds}s…',loadModelsError:'Failed to load models: {error}',author:'Author',descriptionMissing:'No description available',versionsFiles:'Versions and files',modelFile:'Model file',download:'Download',noFiles:'No files available',downloadStarted:'Download started',loadingModel:'Loading model…',modelOpenError:'Failed to open model: {error}',modelDetailsError:'Failed to load model details: {error}',apiConfigured:'API key configured',apiMissing:'API key not configured',serverOnline:'Server online · {host}{version}',tokenSaved:'Stored permanently in .env: {token}',tokenMissing:'The key has not been saved yet',searchPlaceholder:'Find a model, LoRA, checkpoint… ({min}+ chars)',searchTooShort:'Enter at least {min} characters to search.',settingsSaved:'✓ Settings saved',settingsToast:'Settings saved',settingsError:'Error: {error}',initializationError:'Interface startup error: {error}',mediaLabel:'Media {number}',showAllVersions:'Show all versions ({count})',showLessVersions:'Show fewer versions',openOnCivitai:'Open on Civitai',switchLanguage:'Переключить на русский',byteB:'B',byteKB:'KB',byteMB:'MB',byteGB:'GB',removeToken:'Remove key',confirmRemoveToken:'Remove the saved API key from .env?',tokenRemoved:'API key removed',privateMode:'Private mode',lockPasswordLabel:'Password',lockCurrentLabel:'Current password',lockNewLabel:'New password',lockRepeatLabel:'Repeat password',unlock:'Unlock',lockSet:'Set password',lockChange:'Change password',lockNow:'Lock now',lockRemove:'Remove password',lockDescriptionOff:'No password is set. Once you set one, without the password only browsing and downloading models without 18+ content is available; collections, your content, favorites, Buzz and the API key are hidden.',lockDescriptionOn:'A password is set and private mode is currently off. You can change the password, remove it, or lock access right away.',lockDescriptionLocked:'Private mode is on: only browsing and downloading models without 18+ content is available. Enter the password to restore full access.',lockEnterPassword:'Enter the password',lockEnterCurrent:'Enter the current password',lockRules:'The password must be 4 to 200 characters long',lockMismatch:'Passwords do not match',lockSetDone:'Password set',lockChanged:'Password changed',lockRemoved:'Password removed, private mode disabled',lockRemoveConfirm:'Remove the password? Private mode will be fully disabled.',unlocked:'Full access restored',lockedNow:'Private mode enabled',lockThrottled:'Too many attempts. Retry in {seconds}s.',unlockHint:'Private mode — enter password',lockNowHint:'Lock (enable private mode)',collections:'Collections',myContent:'My content',collectionsTitle:'My collections',collectionsSubtitle:'Collections from your Civitai account',mineTitle:'My content',mineSubtitle:'Your media and posts',tabMedia:'Media',tabPosts:'Posts',buzzBalance:'Buzz balance',buzzTotal:'Total',buzzBlue:'Blue',buzzYellow:'Yellow',buzzGreen:'Green',buzzRed:'Red',buzzUnavailable:'Buzz unavailable: {error}',openProfile:'Civitai profile',openSettings:'Open settings',accountNeedsToken:'API key required',accountNeedsTokenText:'Save your Civitai API key in Settings to see your collections, media and posts.',noPermissionTitle:'No permission',noPermissionText:'This API key has no permission for this data. Create a key with the required scope on Civitai.',accountLoadError:'Failed to load account data: {error}',noCollections:'No collections yet',collectionEmpty:'This collection is empty',noMedia:'No media yet',noPosts:'No posts yet',typeModel:'Models',typeImage:'Images',typePost:'Posts',typeArticle:'Articles',privateCollection:'Private',bookmark:'Bookmarks',untitledPost:'Untitled post',imagesCount:'{count} media',generationData:'Generation data',prompt:'Prompt',negativePrompt:'Negative prompt',resources:'Resources',sampler:'Sampler',steps:'Steps',cfg:'CFG',seed:'Seed',size:'Size',noGenerationData:'No generation data provided',copy:'Copy',copied:'Copied',openImage:'Open media',openPost:'Open post',postImages:'Post media',published:'Published',reactions:'Reactions',comments:'Comments',accountStatus:'Status: {status}',member:'Member',signedInAs:'Account: {name}',openOriginal:'Open original',newPost:'New post',publishNew:'Publish',dropFiles:'Drop files here or click to choose',dropHint:'Images up to 50 MB, videos up to 750 MB, up to 20 files',postTitle:'Title',postTitlePlaceholder:'Optional',postDescription:'Description',postDescriptionPlaceholder:'Optional',publishNow:'Publish',publishing:'Publishing…',uploadingFile:'Uploading {name}…',fileReady:'Ready',fileUploaded:'Uploaded',fileError:'Error',removeFile:'Remove file',fileTypeError:'{name}: unsupported file type',fileSizeError:'{name}: file is larger than {max} MB',tooManyFiles:'You can add up to {max} files',noFilesSelected:'Add at least one file',publishSuccess:'Post created. Civitai is processing the media — it will appear in the list in about a minute.',publishError:'Failed to publish: {error}',confirmClosePublish:'An upload is still running. Close the window and cancel it?',deleteImage:'Delete media',deletePost:'Delete post',confirmDeleteImage:'Permanently delete this media from Civitai?',confirmDeletePost:'Permanently delete this post and all of its media from Civitai?',imageDeleted:'Media deleted',postDeleted:'Post deleted',deleteError:'Failed to delete: {error}',noWritePermission:'The API key has no permission to publish (Media Write).',noDeletePermission:'The API key has no permission to delete (Media Delete).',retry:'Retry',metaFound:'Generation data found',rateLimited:'Civitai temporarily rate-limited requests. Retry in {seconds}s.',connectionLost:'Connection to the server was lost',addToCollection:'Add to collection',toCollection:'To collection',newCollection:'New collection',collectionNamePlaceholder:'Name, up to 30 characters',privacyPrivate:'Private',privacyUnlisted:'Unlisted',privacyPublic:'Public',createAndAdd:'Create and add',noCollectionsOfType:'You have no «{type}» collections yet. Create one below.',addedToCollection:'Added to «{name}»',removedFromCollection:'Removed from «{name}»',collectionCreated:'Collection «{name}» created',collectionError:'Failed to update the collection: {error}',removeFromCollection:'Remove from collection',cannotRemove:'Another contributor added this item — only they can remove it',noCollectionPermission:'The API key has no permission to change collections (Collections Write).',collectionNameRequired:'Enter a collection name'
   }
 };
@@ -36,26 +38,37 @@ function applyTranslations(){
 }
 function toast(message,type='ok'){const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=message;$('#toasts').append(el);setTimeout(()=>el.remove(),3500)}
 let activeDialog=null;
-let dialogReturnFocus=null;
+const dialogStack=[];
 function focusableIn(dialog){return [...dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el=>!el.closest('.hidden')&&el.offsetParent!==null)}
 function showDialog(dialog,preferredSelector){
   if(!dialog)return;
-  if(dialog.classList.contains('hidden'))dialogReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  const existing=dialogStack.findIndex(entry=>entry.dialog===dialog);
+  if(existing<0)dialogStack.push({dialog,returnFocus:document.activeElement instanceof HTMLElement?document.activeElement:null});
+  else if(existing!==dialogStack.length-1)dialogStack.push(...dialogStack.splice(existing,1));
   dialog.classList.remove('hidden');dialog.setAttribute('aria-hidden','false');activeDialog=dialog;document.body.classList.add('modal-open');
-  requestAnimationFrame(()=>{const preferred=preferredSelector?dialog.querySelector(preferredSelector):null;(preferred||focusableIn(dialog)[0])?.focus()});
+  for(const entry of dialogStack){const inactive=entry.dialog!==activeDialog;entry.dialog.inert=inactive;entry.dialog.setAttribute('aria-hidden',inactive?'true':'false')}
+  syncVisibleVideos();
+  requestAnimationFrame(()=>{if(activeDialog!==dialog||dialog.classList.contains('hidden'))return;const preferred=preferredSelector?dialog.querySelector(preferredSelector):null;(preferred||focusableIn(dialog)[0])?.focus()});
 }
 function hideDialog(dialog){
   if(!dialog)return;
   dialog.classList.add('hidden');dialog.setAttribute('aria-hidden','true');
-  if(activeDialog===dialog)activeDialog=null;
-  if(!document.querySelector('.modal:not(.hidden)'))document.body.classList.remove('modal-open');
-  const restore=dialogReturnFocus;dialogReturnFocus=null;if(restore?.isConnected)restore.focus();
+  const index=dialogStack.findIndex(entry=>entry.dialog===dialog);
+  const wasActive=activeDialog===dialog;
+  const entry=index<0?null:dialogStack.splice(index,1)[0];
+  activeDialog=dialogStack.at(-1)?.dialog||null;
+  dialog.inert=true;
+  for(const remaining of dialogStack){const inactive=remaining.dialog!==activeDialog;remaining.dialog.inert=inactive;remaining.dialog.setAttribute('aria-hidden',inactive?'true':'false')}
+  if(!activeDialog)document.body.classList.remove('modal-open');
+  if(wasActive){const restore=entry?.returnFocus;if(restore?.isConnected&&(!activeDialog||activeDialog.contains(restore)))restore.focus();else if(activeDialog)focusableIn(activeDialog)[0]?.focus()}
+  syncVisibleVideos();
 }
 function trapDialogTab(event){
   if(!activeDialog||event.key!=='Tab')return;
   const focusable=focusableIn(activeDialog);if(!focusable.length){event.preventDefault();return}
   const first=focusable[0],last=focusable[focusable.length-1];
-  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+  if(!activeDialog.contains(document.activeElement)){event.preventDefault();(event.shiftKey?last:first).focus()}
+  else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
 }
 function fmt(value){if(value==null||value===''||!Number.isFinite(Number(value)))return '—';return Intl.NumberFormat(localeName(),{notation:'compact',maximumFractionDigits:1}).format(Number(value))}
@@ -104,9 +117,12 @@ const CARD_IMAGE_WIDTH=Math.round(Math.min(720,Math.max(360,300*(window.devicePi
 const MAX_IMAGE_LOADS=3;
 const MAX_PLAYING_VIDEOS=2;
 const MAX_CLIENT_MODEL_DETAILS=12;
+const IMAGE_LOAD_TIMEOUT_MS=30000;
 let mediaObserver=null;
 let activeImageLoads=0;
 const imageQueue=[];
+const imageLoadJobs=new Map();
+const progressiveImageJobs=new Map();
 const visibleCardVideos=new Set();
 function civitaiMediaUrl(url,{width=CARD_IMAGE_WIDTH,quality=82,mode='image'}={}){
   const value=String(url||'');
@@ -156,14 +172,17 @@ function bindProgressiveImages(root=document){
   root.querySelectorAll('img.js-progressive-image[data-full]').forEach(img=>{
     if(img.dataset.upgrading==='1'||img.dataset.upgraded==='1')return;
     const upgrade=()=>{
+      if(!img.isConnected||img.dataset.cancelled==='1')return;
       const full=img.dataset.full;
       if(!full||full===img.src){img.dataset.upgraded='1';return}
       img.dataset.upgrading='1';
       const pre=new Image();
       pre.decoding='async';
-      pre.src=full;
-      pre.onload=()=>{if(img.isConnected){img.src=full;img.dataset.upgraded='1';img.classList.add('is-full')}delete img.dataset.upgrading};
-      pre.onerror=()=>{delete img.dataset.upgrading};
+      let finished=false;
+      const done=loaded=>{if(finished)return;finished=true;clearTimeout(timer);pre.onload=null;pre.onerror=null;progressiveImageJobs.delete(img);if(loaded&&img.isConnected&&img.dataset.cancelled!=='1'){img.src=full;img.dataset.upgraded='1';img.classList.add('is-full')}else if(!loaded)pre.removeAttribute('src');delete img.dataset.upgrading};
+      const timer=setTimeout(()=>done(false),IMAGE_LOAD_TIMEOUT_MS);
+      progressiveImageJobs.set(img,()=>done(false));
+      pre.onload=()=>done(true);pre.onerror=()=>done(false);pre.src=full;
     };
     if(img.complete)setTimeout(upgrade,100);else img.addEventListener('load',()=>setTimeout(upgrade,100),{once:true});
   });
@@ -171,16 +190,19 @@ function bindProgressiveImages(root=document){
 function pumpImageQueue(){
   while(activeImageLoads<MAX_IMAGE_LOADS&&imageQueue.length){
     const img=imageQueue.shift();
-    if(!img?.isConnected||img.dataset.loaded==='1')continue;
+    if(!img?.isConnected||img.dataset.cancelled==='1'||img.dataset.loaded==='1')continue;
     const src=img.dataset.src;
     if(!src)continue;
     img.dataset.loaded='1';
     activeImageLoads++;
-    const done=()=>{activeImageLoads=Math.max(0,activeImageLoads-1);img.onload=null;img.onerror=null;pumpImageQueue()};
-    img.onload=done;img.onerror=done;img.src=src;
+    let finished=false;
+    const done=cancel=>{if(finished)return;finished=true;clearTimeout(timer);imageLoadJobs.delete(img);activeImageLoads=Math.max(0,activeImageLoads-1);img.onload=null;img.onerror=null;if(cancel){img.removeAttribute('src');delete img.dataset.loaded;delete img.dataset.queued}pumpImageQueue()};
+    const timer=setTimeout(()=>done(true),IMAGE_LOAD_TIMEOUT_MS);
+    imageLoadJobs.set(img,()=>done(true));
+    img.onload=()=>done(false);img.onerror=()=>done(false);img.src=src;
   }
 }
-function queueImage(img){if(!img||img.dataset.loaded==='1'||img.dataset.queued==='1')return;img.dataset.queued='1';imageQueue.push(img);pumpImageQueue()}
+function queueImage(img){if(!img||img.dataset.loaded==='1'||img.dataset.queued==='1')return;delete img.dataset.cancelled;img.dataset.queued='1';imageQueue.push(img);pumpImageQueue()}
 function unloadVideo(video){
   if(!(video instanceof HTMLVideoElement))return;
   try{video.pause()}catch{}
@@ -196,7 +218,7 @@ function syncVisibleVideos(){
     if(!video.isConnected){visibleCardVideos.delete(video);continue}
     lockVideo(video);
     if(video.dataset.poster&&!video.poster)video.poster=video.dataset.poster;
-    if(playing<MAX_PLAYING_VIDEOS){
+    if(!activeDialog&&document.visibilityState!=='hidden'&&playing<MAX_PLAYING_VIDEOS){
       if(!video.src&&video.dataset.src){video.src=video.dataset.src;video.load()}
       const promise=video.play();if(promise?.catch)promise.catch(()=>{});playing++;
     }else video.pause();
@@ -227,6 +249,10 @@ function bindMediaPlayback(root=document){
   suppressBrowserVideoOverlays();
 }
 function cleanupMedia(root){
+  const images=new Set(root.querySelectorAll('img'));
+  for(const img of images)img.dataset.cancelled='1';
+  for(let i=imageQueue.length-1;i>=0;i--)if(images.has(imageQueue[i]))imageQueue.splice(i,1);
+  for(const img of images){imageLoadJobs.get(img)?.();progressiveImageJobs.get(img)?.()}
   root.querySelectorAll('video').forEach(video=>{visibleCardVideos.delete(video);clearTimeout(video.__unloadTimer);unloadVideo(video)});
   if(mediaObserver)root.querySelectorAll('.js-lazy-cover, video.js-card-video').forEach(el=>mediaObserver.unobserve(el));
 }
@@ -281,10 +307,12 @@ function getModelDetail(id){
   id=Number(id);
   if(state.modelDetails.has(id)){const model=state.modelDetails.get(id);state.modelDetails.delete(id);state.modelDetails.set(id,model);return Promise.resolve(model)}
   if(state.modelDetailPromises.has(id))return state.modelDetailPromises.get(id);
-  const promise=api(`/api/models/${id}`).then(model=>{cacheModelDetail(id,model);return model}).finally(()=>state.modelDetailPromises.delete(id));
+  const epoch=state.modelDetailEpoch||0;
+  const promise=api(`/api/models/${id}`).then(model=>{if(epoch!==(state.modelDetailEpoch||0))throw Object.assign(new Error('Model access changed'),{name:'AbortError'});cacheModelDetail(id,model);return model}).finally(()=>{if(state.modelDetailPromises.get(id)===promise)state.modelDetailPromises.delete(id)});
   state.modelDetailPromises.set(id,promise);
   return promise;
 }
+function invalidateModelDetails(){state.modelDetailEpoch=(state.modelDetailEpoch||0)+1;state.modelDetails.clear();state.modelDetailPromises.clear()}
 function initGridEvents(){
   const grid=$('#grid');
   grid.addEventListener('click',event=>{
@@ -436,11 +464,11 @@ async function loadModels({append=false,retryAttempt=0}={}){
       if(append){
         const key=`${requestSource}:${search?'search':'catalog'}:${pagination.type}:${pagination.value}`;
         if(state.usedPagination.has(key)){
-          if(requestSource==='auto'){requestSource='fallback';source='fallback'}else{dbg('warn','Repeated Civitai pagination pointer',{pagination:key});break}
+          if(requestSource==='auto'){requestSource='fallback';source='fallback'}else{dbg('warn','Repeated Civitai pagination pointer',{pagination:key});workingMeta={...(workingMeta||{}),nextPage:null,nextCursor:null};break}
         }
-        state.usedPagination.add(`${requestSource}:${search?'search':'catalog'}:${pagination.type}:${pagination.value}`);
       }
       let data=await requestPage(pagination,requestSource);
+      if(append)state.usedPagination.add(`${requestSource}:${search?'search':'catalog'}:${pagination.type}:${pagination.value}`);
       let incoming=Array.isArray(data.items)?data.items:[];
       let merged=mergeUniqueModels(workingItems,incoming);
       let added=merged.added;
@@ -448,8 +476,8 @@ async function loadModels({append=false,retryAttempt=0}={}){
       if(append&&added===0&&requestSource!=='fallback'){
         const fallbackKey=`fallback:${search?'search':'catalog'}:${pagination.type}:${pagination.value}`;
         if(!state.usedPagination.has(fallbackKey)){
-          state.usedPagination.add(fallbackKey);
           const fallbackData=await requestPage(pagination,'fallback');
+          state.usedPagination.add(fallbackKey);
           const fallbackIncoming=Array.isArray(fallbackData.items)?fallbackData.items:[];
           const fallbackMerged=mergeUniqueModels(workingItems,fallbackIncoming);
           data=fallbackData;incoming=fallbackIncoming;merged=fallbackMerged;added=fallbackMerged.added;acceptedSource='fallback';source='fallback';
@@ -502,6 +530,7 @@ function versionHtml(version){
   return `<div class="version"><div class="version-head"><div><b>${esc(version.name||'')}</b><br><small>${esc(version.baseModel||'')}${date?` · ${date}`:''}</small></div><small>#${esc(version.id||'')}</small></div><div class="files">${files}</div></div>`;
 }
 function renderModelDetails(model){
+  cleanupMedia($('#modalContent'));
   const versions=model.modelVersions||[];
   const media=modelMedia(model).slice(0,10);
   const first=media[0]||null;
@@ -527,25 +556,30 @@ function renderModelDetails(model){
 function closeModelModal(){
   state.modalRequest++;
   state.openModelId=null;
+  state.openMediaId=null;state.openPostId=null;
   state.showAllVersions=false;
   cleanupMedia($('#modalContent'));
   hideDialog($('#modal'));
   $('#modalContent').innerHTML='';
+  pruneAccountIndexes();
 }
 async function openModel(id){
   const request=++state.modalRequest;
   state.openModelId=Number(id);
+  state.openMediaId=null;state.openPostId=null;
+  pruneAccountIndexes();
   state.showAllVersions=false;
   const summary=findModelById(id);
   const summaryMedia=cover(summary);
   showDialog($('#modal'),'#modalClose');
+  cleanupMedia($('#modalContent'));
   $('#modalContent').innerHTML=`<div class="details"><div class="details-media-wrap"><div class="details-media natural"${mediaFrameStyle(summaryMedia)}>${mediaHtml(summaryMedia,{autoplay:summaryMedia?.kind==='video',label:false,original:true,controls:summaryMedia?.kind==='video'})}</div></div><div class="details-info details-loading"><div class="detail-badges">${summary?.type?`<span class="detail-pill">${esc(modelTypeLabel(summary.type))}</span>`:''}${modelBaseModel(summary)?`<span class="detail-pill base">${esc(modelBaseModel(summary))}</span>`:''}</div><h2>${esc(summary?.name||t('loadingModel'))}</h2><div class="meta">${(summary?.creator?.username||summary?.author)?`${t('author')}: ${esc(summary?.creator?.username||summary?.author)} · `:''}ID ${id}</div><div class="detail-skeleton"><i></i><i></i><i></i><i></i></div></div></div>`;
   bindMediaPlayback($('#modalContent'));
   try{
     const model=await getModelDetail(id);
     if(request===state.modalRequest&&state.openModelId===Number(id)&&!$('#modal').classList.contains('hidden'))renderModelDetails(model);
   }catch(error){
-    if(request!==state.modalRequest)return;
+    if(error?.name==='AbortError'||request!==state.modalRequest)return;
     if(error?.code==='LOCKED_NSFW'){closeModelModal();toast(error.message,'bad');return}
     toast(t('modelOpenError',{error:error.message}),'bad');
     dbg('error','Model',error);
@@ -604,7 +638,7 @@ function activeCollection(){return (state.collections||[]).find(item=>item.id===
 function readStoredCollection(){try{return Number(localStorage.getItem('civitai.collection'))||null}catch{return null}}
 function storeCollection(id){try{localStorage.setItem('civitai.collection',String(id))}catch{}}
 function abortAccountRequest(){state.accountSeq++;state.accountAbort?.abort();state.accountAbort=null;state.accountBusy=false}
-function resetAccountList(){abortAccountRequest();state.accountItems=[];state.accountKind=null;state.accountCursor=null;state.accountListError=null}
+function resetAccountList(){abortAccountRequest();state.accountItems=[];state.accountKind=null;state.accountCursor=null;state.accountListError=null;pruneAccountIndexes()}
 function accountMediaItem(item){return item?.url?{url:item.url,kind:item.type==='video'?'video':'image',poster:'',width:Number(item.width)||0,height:Number(item.height)||0}:null}
 function indexAccountItems(items,kind){
   for(const item of items||[]){
@@ -612,18 +646,33 @@ function indexAccountItems(items,kind){
     if(kind==='post'){state.postIndex.set(Number(item.id),item);for(const image of item.images||[])state.mediaIndex.set(Number(image.id),image)}
   }
 }
+function pruneAccountIndexes(){
+  const image=state.openMediaId?state.mediaIndex.get(Number(state.openMediaId)):null;
+  const post=state.openPostId?state.postIndex.get(Number(state.openPostId)):null;
+  state.mediaIndex.clear();state.postIndex.clear();
+  indexAccountItems(state.accountItems,state.accountKind);
+  if(post)indexAccountItems([post],'post');
+  if(image)state.mediaIndex.set(Number(image.id),image);
+}
 async function loadCollections({force=false}={}){
   if(state.collections&&!force)return state.collections;
-  const data=await api('/api/account/collections');
-  state.collections=Array.isArray(data.items)?data.items:[];
-  state.collectionsError=null;
-  $('#collectionCount').textContent=state.collections.length;
-  $('#collectionCount').classList.toggle('hidden',!state.collections.length);
-  if(!state.collections.some(item=>item.id===state.activeCollectionId)){
-    const stored=readStoredCollection();
-    state.activeCollectionId=(state.collections.find(item=>item.id===stored)||state.collections[0])?.id??null;
-  }
-  return state.collections;
+  if(state.collectionsPromise&&!force)return state.collectionsPromise;
+  const epoch=state.accountEpoch||0;
+  const request=state.collectionsRequest=(state.collectionsRequest||0)+1;
+  const promise=api('/api/account/collections').then(data=>{
+    if(epoch!==(state.accountEpoch||0)||request!==state.collectionsRequest)return [];
+    state.collections=Array.isArray(data.items)?data.items:[];
+    state.collectionsError=null;
+    $('#collectionCount').textContent=state.collections.length;
+    $('#collectionCount').classList.toggle('hidden',!state.collections.length);
+    if(!state.collections.some(item=>item.id===state.activeCollectionId)){
+      const stored=readStoredCollection();
+      state.activeCollectionId=(state.collections.find(item=>item.id===stored)||state.collections[0])?.id??null;
+    }
+    return state.collections;
+  }).finally(()=>{if(state.collectionsPromise===promise)state.collectionsPromise=null});
+  state.collectionsPromise=promise;
+  return promise;
 }
 function accountListUrl(append){
   const params=new URLSearchParams({limit:'40'});
@@ -647,7 +696,7 @@ async function loadAccountItems({append=false}={}){
   const controller=new AbortController();
   state.accountAbort=controller;
   state.accountBusy=true;
-  if(!append){state.accountItems=[];state.accountKind=null;state.accountCursor=null;state.accountListError=null;render()}
+  if(!append){state.accountItems=[];state.accountKind=null;state.accountCursor=null;state.accountListError=null;pruneAccountIndexes();render()}
   syncLoading();
   try{
     if(view==='collections'&&!state.collections){await loadCollections();if(seq!==state.accountSeq)return;render()}
@@ -771,6 +820,8 @@ async function openImage(id,{fromPost=null}={}){
   if(!item)return;
   const request=++state.modalRequest;
   state.openModelId=null;
+  state.openMediaId=Number(id);state.openPostId=fromPost?Number(fromPost):null;
+  pruneAccountIndexes();
   const media=accountMediaItem(item);
   const content=$('#modalContent');
   if($('#modal').classList.contains('hidden'))showDialog($('#modal'),'#modalClose');
@@ -799,6 +850,8 @@ function openPost(id){
   if(!post)return;
   state.modalRequest++;
   state.openModelId=null;
+  state.openMediaId=null;state.openPostId=Number(id);
+  pruneAccountIndexes();
   const content=$('#modalContent');
   if($('#modal').classList.contains('hidden'))showDialog($('#modal'),'#modalClose');
   cleanupMedia(content);
@@ -806,6 +859,25 @@ function openPost(id){
   const tiles=(post.images||[]).map(image=>`<button class="post-tile" type="button" data-post-image="${Number(image.id)}" data-post-id="${Number(post.id)}" aria-label="${esc(t('openImage'))}">${postTileMedia(image)}</button>`).join('');
   content.innerHTML=`<div class="post-details"><div class="detail-badges"><span class="detail-pill">${esc(t('typePost'))}</span><span class="detail-pill base">${esc(t('imagesCount',{count:fmt(post.imageCount)}))}</span></div><h2>${esc(title)}</h2><div class="meta">${esc(t('published'))}: ${esc(formatDate(post.publishedAt)||'—')} · ♥ ${fmt(post.reactions)} · ✉ ${fmt(post.comments)} · ID ${Number(post.id)}</div><div class="detail-links"><a class="model-page-link" href="https://civitai.red/posts/${encodeURIComponent(post.id)}" target="_blank" rel="noopener noreferrer">${esc(t('openOnCivitai'))} ↗</a>${collectButton('Post',post.id,{inline:true})}</div>${ownsItem(post)&&canDeleteMedia()?`<button class="danger-btn" type="button" data-delete-post="${Number(post.id)}">✕ ${esc(t('deletePost'))}</button>`:''}<div class="post-grid">${tiles}</div></div>`;
   bindMediaPlayback(content);
+}
+function refreshModalPermissions(){
+  const modal=$('#modal'),content=$('#modalContent');
+  if(modal.classList.contains('hidden'))return;
+  const links=content.querySelector('.detail-links');
+  if(!links)return;
+  const type=state.openModelId?'Model':state.openMediaId?'Image':state.openPostId?'Post':null;
+  const id=type==='Model'?state.openModelId:type==='Image'?state.openMediaId:state.openPostId;
+  if(!type||!id)return;
+  const focused=document.activeElement;
+  const collectControl=links.querySelector('[data-collect-type]');
+  if(canWriteCollections()){if(!collectControl)links.insertAdjacentHTML('beforeend',collectButton(type,id,{inline:true}))}
+  else collectControl?.remove();
+  const item=type==='Image'?state.mediaIndex.get(Number(id)):type==='Post'?state.postIndex.get(Number(id)):null;
+  const deleteControl=content.querySelector('[data-delete-image],[data-delete-post]');
+  if(item&&ownsItem(item)&&canDeleteMedia()){
+    if(!deleteControl){const image=type==='Image';links.insertAdjacentHTML('afterend',`<button class="danger-btn" type="button" ${image?'data-delete-image':'data-delete-post'}="${Number(id)}">✕ ${esc(t(image?'deleteImage':'deletePost'))}</button>`)}
+  }else deleteControl?.remove();
+  if(focused&&!focused.isConnected&&activeDialog===modal)$('#modalClose').focus();
 }
 function renderAccountPill(){
   const pill=$('#accountBtn');
@@ -841,14 +913,24 @@ async function loadAccountProfile({fresh=false}={}){
     state.accountError={code:error.code,message:error.message};
     dbg('warn','Account profile',error);
   }finally{
-    if(request===accountProfileRequest){state.accountLoading=false;renderAccountPill();const scopeKey=String(state.account?.tokenScope??'')+'|'+String(state.account?.username??'');if(scopeKey!==state.renderedScopeKey){state.renderedScopeKey=scopeKey;if(document.querySelector('#grid .card'))render();if(state.view==='mine')renderSubnav()}}
+    if(request===accountProfileRequest){state.accountLoading=false;renderAccountPill();const scopeKey=String(state.account?.tokenScope??'')+'|'+String(state.account?.username??'');if(scopeKey!==state.renderedScopeKey){state.renderedScopeKey=scopeKey;if(document.querySelector('#grid .card'))render();if(state.view==='mine')renderSubnav();refreshModalPermissions()}}
   }
 }
 function setAccountMenu(open){
   $('#accountMenu').classList.toggle('hidden',!open);
   $('#accountBtn').setAttribute('aria-expanded',open?'true':'false');
 }
+function invalidateAccountRequests(){
+  state.accountEpoch=(state.accountEpoch||0)+1;
+  state.collectionsRequest=(state.collectionsRequest||0)+1;
+  state.collectionsPromise=null;
+  accountProfileRequest++;
+  collect.request++;collect.member.clear();collect.busy.clear();
+  cancelPublish();resetPublishForm();
+}
 function onTokenChanged(){
+  invalidateAccountRequests();invalidateModelDetails();
+  if(!$('#modal').classList.contains('hidden'))closeModelModal();
   state.account=null;state.accountError=null;state.collections=null;state.activeCollectionId=null;
   state.mediaIndex.clear();state.postIndex.clear();
   $('#collectionCount').classList.add('hidden');
@@ -958,11 +1040,13 @@ function initEvents(){
   document.addEventListener('keydown',event=>{
     if(event.key==='Tab')trapDialogTab(event);
     if(event.key!=='Escape')return;
-    if(!$('#accountMenu').classList.contains('hidden')){setAccountMenu(false);$('#accountBtn').focus();return}
-    if(!$('#collectModal').classList.contains('hidden')){closeCollectDialog();return}
-    if(!$('#publishModal').classList.contains('hidden')){closePublishDialog();return}
-    if(!$('#modal').classList.contains('hidden'))closeModelModal();else if(!$('#settingsModal').classList.contains('hidden'))hideDialog($('#settingsModal'));
+    if(!activeDialog&&!$('#accountMenu').classList.contains('hidden')){setAccountMenu(false);$('#accountBtn').focus();return}
+    if(activeDialog===$('#collectModal'))closeCollectDialog();
+    else if(activeDialog===$('#publishModal'))closePublishDialog();
+    else if(activeDialog===$('#modal'))closeModelModal();
+    else if(activeDialog===$('#settingsModal'))hideDialog($('#settingsModal'));
   });
+  document.addEventListener('visibilitychange',syncVisibleVideos);
 }
 document.addEventListener('DOMContentLoaded',async()=>{
   applyTranslations();
@@ -976,7 +1060,7 @@ const PUBLISH_TYPES={'image/png':'image','image/jpeg':'image','image/webp':'imag
 const PUBLISH_MAX_FILES=20;
 const PUBLISH_MAX_IMAGE_MB=50;
 const PUBLISH_MAX_VIDEO_MB=750;
-const publish={files:[],busy:false,xhr:null,seq:0};
+const publish={files:[],busy:false,xhr:null,seq:0,epoch:0,preparing:0,controller:null,stage:'idle'};
 function hasScope(bit){const scope=Number(state.account?.tokenScope);return Number.isSafeInteger(scope)&&(scope&bit)===bit}
 function canWriteMedia(){return hasToken()&&hasScope(SCOPE_MEDIA_WRITE)}
 function canDeleteMedia(){return hasToken()&&hasScope(SCOPE_MEDIA_DELETE)}
@@ -1103,11 +1187,12 @@ async function readPngParameters(file){
 }
 function readMediaInfo(kind,url){
   return new Promise(resolve=>{
-    let timer=null;
-    const done=info=>{clearTimeout(timer);resolve(info)};
+    let timer=null,source=null,settled=false;
+    const done=info=>{if(settled)return;settled=true;clearTimeout(timer);if(source){source.onload=null;source.onerror=null;source.onloadedmetadata=null;source.removeAttribute('src');if(kind==='video')try{source.load()}catch{}}resolve(info)};
     timer=setTimeout(()=>done({}),15000);
     if(kind==='video'){
       const video=document.createElement('video');
+      source=video;
       video.preload='metadata';video.muted=true;
       video.onloadedmetadata=()=>done({width:video.videoWidth,height:video.videoHeight,duration:video.duration});
       video.onerror=()=>done({});
@@ -1115,13 +1200,19 @@ function readMediaInfo(kind,url){
       return;
     }
     const image=new Image();
+    source=image;
     image.onload=()=>done({width:image.naturalWidth,height:image.naturalHeight});
     image.onerror=()=>done({});
     image.src=url;
   });
 }
 async function addPublishFiles(fileList){
-  for(const file of [...(fileList||[])]){
+  if(publish.busy)return;
+  const epoch=publish.epoch;
+  publish.preparing++;
+  renderPublishList();
+  try{for(const file of [...(fileList||[])]){
+    if(epoch!==publish.epoch||publish.busy)break;
     if(publish.files.length>=PUBLISH_MAX_FILES){toast(t('tooManyFiles',{max:PUBLISH_MAX_FILES}),'bad');break}
     const kind=PUBLISH_TYPES[file.type];
     if(!kind){toast(t('fileTypeError',{name:file.name}),'bad');continue}
@@ -1131,19 +1222,23 @@ async function addPublishFiles(fileList){
     publish.files.push(entry);
     renderPublishList();
     const [info,meta]=await Promise.all([readMediaInfo(kind,entry.url),kind==='image'?readPngParameters(file):null]);
+    if(epoch!==publish.epoch)break;
+    if(!publish.files.includes(entry))continue;
     Object.assign(entry,{width:info.width||0,height:info.height||0,duration:Number.isFinite(info.duration)?info.duration:0,meta});
     renderPublishList();
-  }
+  }}finally{if(epoch===publish.epoch){publish.preparing=Math.max(0,publish.preparing-1);renderPublishList()}}
 }
 function renderPublishList(){
+  cleanupMedia($('#publishList'));
   $('#publishList').innerHTML=publish.files.map(entry=>{
     const preview=entry.kind==='video'?`<video src="${esc(entry.url)}" muted playsinline preload="metadata"></video>`:`<img src="${esc(entry.url)}" alt="">`;
     const status=entry.status==='uploading'?`${Math.round(entry.progress)}%`:entry.status==='done'?t('fileUploaded'):entry.status==='error'?`${t('fileError')}: ${entry.error}`:t('fileReady');
     const details=[formatBytes(entry.file.size),entry.width&&entry.height?`${entry.width}×${entry.height}`:'',entry.duration?`${Math.round(entry.duration)} s`:'',entry.meta?t('metaFound'):''].filter(Boolean).join(' · ');
     return `<div class="publish-item ${esc(entry.status)}" data-file="${entry.id}"><div class="publish-thumb">${preview}</div><div class="publish-info"><b title="${esc(entry.file.name)}">${esc(entry.file.name)}</b><small>${esc(details)}</small><div class="publish-progress"><i style="width:${entry.status==='done'?100:Math.round(entry.progress)}%"></i></div><small class="publish-status">${esc(status)}</small></div><button class="icon-btn publish-remove" type="button" data-remove-file="${entry.id}" aria-label="${esc(t('removeFile'))}" ${publish.busy?'disabled':''}>×</button></div>`;
   }).join('');
-  $('#publishSubmit').disabled=publish.busy||!publish.files.length;
+  $('#publishSubmit').disabled=publish.busy||publish.preparing>0||!publish.files.length;
   $('#publishSubmit').textContent=publish.busy?t('publishing'):t('publishNow');
+  $('#publishClose').disabled=publish.busy&&publish.stage==='creating';
   $('#dropZone').classList.toggle('disabled',publish.busy);
 }
 function renderPublishProgress(entry){
@@ -1153,6 +1248,7 @@ function renderPublishProgress(entry){
   row.querySelector('.publish-status').textContent=`${Math.round(entry.progress)}%`;
 }
 function resetPublishForm(){
+  publish.epoch++;publish.preparing=0;
   for(const entry of publish.files)URL.revokeObjectURL(entry.url);
   publish.files=[];
   $('#publishTitleInput').value='';
@@ -1168,9 +1264,11 @@ function openPublishDialog(){
   showDialog($('#publishModal'),'#dropZone');
 }
 function closePublishDialog(){
-  if(publish.busy){if(!confirm(t('confirmClosePublish')))return;publish.cancelled=true;publish.xhr?.abort()}
+  if(publish.busy&&publish.stage==='creating'){$('#publishMsg').textContent=t('publishFinalizing');return}
+  if(publish.busy){if(!confirm(t('confirmClosePublish')))return;cancelPublish()}
   hideDialog($('#publishModal'));
 }
+function cancelPublish(){publish.cancelled=true;publish.controller?.abort();publish.xhr?.abort()}
 function uploadPublishFile(entry){
   return new Promise((resolve,reject)=>{
     const xhr=new XMLHttpRequest();
@@ -1193,11 +1291,14 @@ function uploadPublishFile(entry){
   });
 }
 async function submitPublish(){
-  if(publish.busy)return;
+  if(publish.busy||publish.preparing>0)return;
   if(!publish.files.length){$('#publishMsg').textContent=t('noFilesSelected');return}
   if(!canWriteMedia()){$('#publishMsg').textContent=t('noWritePermission');return}
   publish.busy=true;
+  publish.stage='uploading';
   publish.cancelled=false;
+  const controller=new AbortController();
+  publish.controller=controller;
   $('#publishMsg').textContent='';
   renderPublishList();
   try{
@@ -1214,9 +1315,12 @@ async function submitPublish(){
       }finally{renderPublishList()}
       if(publish.cancelled)throw Object.assign(new Error('aborted'),{name:'AbortError'});
     }
-    $('#publishMsg').textContent=t('publishing');
+    publish.stage='creating';
+    $('#publishMsg').textContent=t('publishFinalizing');
+    renderPublishList();
     const images=publish.files.map(entry=>({uuid:entry.uuid,name:entry.file.name,type:entry.kind,mimeType:entry.file.type,sizeKB:Math.max(1,Math.round(entry.file.size/1024)),width:entry.width||undefined,height:entry.height||undefined,duration:entry.duration||undefined,meta:entry.meta||undefined}));
-    await api('/api/account/posts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:$('#publishTitleInput').value.trim(),detail:$('#publishDetail').value.trim(),publish:true,images})});
+    await api('/api/account/posts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:$('#publishTitleInput').value.trim(),detail:$('#publishDetail').value.trim(),publish:true,images}),signal:controller.signal});
+    if(publish.cancelled||controller.signal.aborted)throw Object.assign(new Error('aborted'),{name:'AbortError'});
     publish.busy=false;
     resetPublishForm();
     hideDialog($('#publishModal'));
@@ -1229,7 +1333,9 @@ async function submitPublish(){
     if(error?.name!=='AbortError'){$('#publishMsg').textContent=t('publishError',{error:apiErrorText(error)});dbg('error','Publish',error)}
   }finally{
     publish.busy=false;
+    publish.stage='idle';
     publish.xhr=null;
+    if(publish.controller===controller)publish.controller=null;
     renderPublishList();
   }
 }
@@ -1295,6 +1401,7 @@ function collectItemName(type,id){
 async function openCollectDialog(type,id){
   if(!canWriteCollections()){toast(t('noCollectionPermission'),'bad');return}
   const request=++collect.request;
+  const epoch=state.accountEpoch||0;
   Object.assign(collect,{type,id:Number(id),name:collectItemName(type,id),member:new Map()});
   collect.busy.clear();
   $('#collectSubtitle').textContent=`${collectionTypeLabel(type)} · ${collect.name}`;
@@ -1305,11 +1412,11 @@ async function openCollectDialog(type,id){
   showDialog($('#collectModal'),'#collectClose');
   try{
     const [,membership]=await Promise.all([loadCollections(),api(`/api/account/collections/for-item?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`)]);
-    if(request!==collect.request)return;
+    if(request!==collect.request||epoch!==(state.accountEpoch||0))return;
     for(const row of membership.items||[])collect.member.set(Number(row.collectionId),row.canRemove!==false);
     renderCollectList();
   }catch(error){
-    if(request!==collect.request)return;
+    if(request!==collect.request||epoch!==(state.accountEpoch||0))return;
     $('#collectList').innerHTML=`<div class="error">${esc(t('collectionError',{error:apiErrorText(error)}))}</div>`;
   }
 }
@@ -1330,18 +1437,19 @@ async function toggleCollectMembership(collectionId){
   const collection=(state.collections||[]).find(item=>item.id===collectionId);
   const inside=collect.member.has(collectionId);
   const {type,id}=collect;
+  const request=collect.request,epoch=state.accountEpoch||0;
   collect.busy.add(collectionId);
   renderCollectList();
   try{
     await api('/api/account/collections/items',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,id,collectionId,action:inside?'remove':'add'})});
-    if(inside)collect.member.delete(collectionId);else collect.member.set(collectionId,true);
+    if(epoch!==(state.accountEpoch||0))return;
+    if(request===collect.request){if(inside)collect.member.delete(collectionId);else collect.member.set(collectionId,true)}
     toast(t(inside?'removedFromCollection':'addedToCollection',{name:collection?.name||`#${collectionId}`}));
     afterCollectionChange(collectionId,type,id,inside?'remove':'add');
   }catch(error){
     toast(t('collectionError',{error:apiErrorText(error)}),'bad');
   }finally{
-    collect.busy.delete(collectionId);
-    if(collect.type===type&&collect.id===id)renderCollectList();
+    if(request===collect.request){collect.busy.delete(collectionId);renderCollectList()}
   }
 }
 function afterCollectionChange(collectionId,type,id,action){
@@ -1363,18 +1471,19 @@ async function createCollectionWithItem(){
   $('#collectCreate').disabled=true;
   $('#collectMsg').textContent='';
   const {type,id}=collect;
+  const request=collect.request,epoch=state.accountEpoch||0;
   try{
     const created=await api('/api/account/collections/create',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name,type,read:collect.read,itemId:id})});
+    if(epoch!==(state.accountEpoch||0))return;
     state.collections=[...(state.collections||[]),{id:created.id,name:created.name,description:'',type:created.type,mode:created.mode,read:created.read,isOwner:true,cover:null}];
     $('#collectionCount').textContent=state.collections.length;
     $('#collectionCount').classList.remove('hidden');
-    if(created.itemAdded)collect.member.set(Number(created.id),true);
-    $('#collectName').value='';
+    if(request===collect.request){if(created.itemAdded)collect.member.set(Number(created.id),true);$('#collectName').value=''}
     toast(t('collectionCreated',{name:created.name}));
-    if(collect.type===type&&collect.id===id)renderCollectList();
+    if(request===collect.request)renderCollectList();
     if(state.view==='collections')renderSubnav();
   }catch(error){
-    $('#collectMsg').textContent=t('collectionError',{error:apiErrorText(error)});
+    if(request===collect.request)$('#collectMsg').textContent=t('collectionError',{error:apiErrorText(error)});
   }finally{
     collect.creating=false;
     $('#collectCreate').disabled=false;
@@ -1383,9 +1492,11 @@ async function createCollectionWithItem(){
 async function removeFromActiveCollection(type,id){
   const collection=activeCollection();
   if(!collection)return;
+  const epoch=state.accountEpoch||0;
   try{
     await api('/api/account/collections/items',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,id,collectionId:collection.id,action:'remove'})});
-    state.accountItems=state.accountItems.filter(item=>Number(item.id)!==Number(id));
+    if(epoch!==(state.accountEpoch||0))return;
+    if(state.view==='collections'&&state.activeCollectionId===collection.id)state.accountItems=state.accountItems.filter(item=>Number(item.id)!==Number(id));
     toast(t('removedFromCollection',{name:collection.name}));
     render();
   }catch(error){toast(t('collectionError',{error:apiErrorText(error)}),'bad')}
@@ -1446,8 +1557,8 @@ async function afterLockChange(status){
   applyStatus(status);
   const locked=isLocked();
   clearLockForms();
-  state.modelDetails.clear();
-  state.modelDetailPromises.clear();
+  invalidateModelDetails();
+  invalidateAccountRequests();
   if(!$('#modal').classList.contains('hidden'))closeModelModal();
   state.account=null;state.accountError=null;state.collections=null;state.activeCollectionId=null;
   state.mediaIndex.clear();state.postIndex.clear();

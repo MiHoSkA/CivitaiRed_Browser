@@ -302,3 +302,79 @@ button img,.thumb-open img,.brand img,.post-tile img,.media-chip img,a.download-
 button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:focus:not(:focus-visible),[tabindex]:focus:not(:focus-visible),.select-trigger:focus:not(:focus-visible){outline:none}
 button::-moz-focus-inner{border:0}
 .card-title,.creator,.stats,.nav-icon,.chip-icon,.sidebar-kicker,.section-kicker,.settings-kicker,.label{-webkit-user-select:none;user-select:none}
+
+body{min-height:100dvh}
+.topbar{grid-template-columns:minmax(170px,1fr) minmax(0,720px) minmax(max-content,1fr)}
+.search-wrap,.header-actions,.details-info,.post-details,.token-row input,.lock-row input{min-width:0}
+.details-media,.media-strip{width:100%;max-width:100%;min-width:0}
+.media-strip{overscroll-behavior-x:contain}
+.icon-btn,.refresh-btn,.result-pill{flex-shrink:0}
+.toolbar{gap:12px}
+.title-row{flex-wrap:wrap}
+.title-row h2{min-width:0;overflow-wrap:anywhere}
+.details h2,.post-details h2,.version-head b,.resource-link,.resource-list li,.account-menu-head b,.settings-msg,.error{overflow-wrap:anywhere}
+.version-head b{min-width:0}
+.modal{padding:max(22px,env(safe-area-inset-top)) max(22px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));overscroll-behavior:contain}
+.modal .modal-card{max-width:100%;max-height:calc(100dvh - max(22px,env(safe-area-inset-top)) - max(22px,env(safe-area-inset-bottom)));overscroll-behavior:contain;scrollbar-gutter:stable}
+.settings h2,.publish h2,.collect h2{padding-right:40px;overflow-wrap:anywhere}
+.settings p.muted{font-size:13px;line-height:1.6}
+.token-row>.icon-btn{height:46px}
+.toasts{max-width:min(420px,calc(100vw - 32px));right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));pointer-events:none}
+.toast{overflow-wrap:anywhere;min-width:0}
+.badge{max-width:calc(100% - 62px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:930px){
+  .topbar{grid-template-columns:auto minmax(0,1fr) auto}
+  .details{grid-template-columns:minmax(0,1fr)}
+  .details-media.natural[style*="aspect-ratio"]{min-height:0}
+}
+@media(max-width:650px){
+  .topbar{height:auto;min-height:112px;grid-template-columns:auto minmax(0,1fr);grid-template-rows:44px 44px;gap:8px 10px;padding:max(8px,env(safe-area-inset-top)) max(13px,env(safe-area-inset-right)) 8px max(13px,env(safe-area-inset-left))}
+  .brand{grid-column:1;grid-row:1}
+  .header-actions{grid-column:2;grid-row:1;gap:6px;max-width:100%}
+  .header-actions>.icon-btn{width:44px;height:44px}
+  .search-wrap{grid-column:1/-1;grid-row:2}
+  .search-wrap input{height:44px;font-size:16px}
+  .account-pill{height:44px}
+  .account-wrap,.account-pill,.buzz-chip,.buzz-chip b{min-width:0}
+  .account-pill,.buzz-chip{max-width:100%}
+  .buzz-chip b{overflow:hidden;text-overflow:ellipsis}
+  .account-menu{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 48px);right:max(13px,env(safe-area-inset-right));width:min(320px,calc(100vw - 26px));max-height:calc(100dvh - 80px);overflow:auto;overscroll-behavior:contain}
+  .layout{padding-bottom:max(13px,env(safe-area-inset-bottom))}
+  .modal{padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+  .modal .modal-card{width:100%;max-height:calc(100dvh - max(8px,env(safe-area-inset-top)) - max(8px,env(safe-area-inset-bottom)))}
+  .settings input,.lock-form input,.publish input[type="text"],.publish textarea,.collect-new input{font-size:16px}
+  .modal-close{width:44px;height:44px;right:12px;top:12px}
+  .details h2,.post-details h2{padding-right:44px}
+  .collect-privacy{gap:6px}
+  .privacy-chip{min-width:0;min-height:44px;height:auto;padding:8px 5px;overflow-wrap:anywhere}
+  .collect-row{min-height:48px}
+  .publish-status{overflow-wrap:anywhere}
+  .select-menu{max-height:min(290px,45dvh)}
+  .select-menu button{overflow-wrap:anywhere}
+  .select-menu.tall{max-height:48dvh}
+}
+@media(max-width:420px){
+  .topbar{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));gap:8px}
+  .search-wrap input{font-size:16px}
+  .publish,.collect{padding-top:24px}
+}
+@media(hover:none),(pointer:coarse){
+  button,a,input,textarea{touch-action:manipulation}
+  .select-menu button{min-height:44px}
+  .nav{min-height:44px}
+  .card:hover{transform:none}
+  .card:hover .thumb img,.card:hover .thumb video{transform:none}
+}
+@media(max-width:650px),(hover:none),(pointer:coarse){
+  .fav-btn,.collect-btn,.card-uncollect,.card-delete{width:44px;height:44px}
+  .collect-btn{top:61px;opacity:1}
+  .card-uncollect{top:111px}
+  .media-card .card-uncollect,.post-card .card-uncollect,.card:not(:has(.fav-btn)) .card-uncollect{top:11px}
+  .badge{max-width:calc(100% - 72px)}
+  .subnav-chip,.select-trigger,.ghost,.link-btn,.download-btn{min-height:44px}
+  .download-btn{display:inline-flex;align-items:center;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+  html:focus-within{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}

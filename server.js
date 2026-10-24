@@ -8,7 +8,7 @@ const dns=require('dns');
 const net=require('net');
 const {Readable,pipeline}=require('stream');
 try{dns.setDefaultResultOrder('ipv4first')}catch{}
-const APP_VERSION='1.8.0';
+const APP_VERSION='1.8.3';
 const ROOT=__dirname;
 const PUBLIC=path.join(ROOT,'public');
 const ENV_FILE=path.resolve(ROOT,process.env.CIVITAI_ENV_FILE||'.env');
@@ -55,6 +55,16 @@ const fallbackSearchCache=new Map();
 const inflight=new Map();
 const corruptJsonBackups=new Set();
 let apiCacheBytes=0;
+let cacheGeneration=0;
+let accountCacheRevision=0;
+function sharedRequest(key,loader){
+  let job=inflight.get(key);
+  if(!job){
+    job=Promise.resolve().then(loader).finally(()=>{if(inflight.get(key)===job)inflight.delete(key)});
+    inflight.set(key,job);
+  }
+  return job;
+}
 const serverText={
   ru:{
     searchTooShort:n=>`Для поиска введи минимум ${n} символа.`,
@@ -149,9 +159,13 @@ const writeJson=(name,data)=>{
   fs.renameSync(tmp,file);
 };
 const ensureJson=(name,fallback)=>{const file=path.join(DATA,name);if(!fs.existsSync(file))writeJson(name,fallback);return file};
-const readJson=(name,fallback)=>{
+const readJson=(name,fallback,{strict=false}={})=>{
   const file=ensureJson(name,fallback);
-  try{return JSON.parse(fs.readFileSync(file,'utf8'))}
+  try{
+    const data=JSON.parse(fs.readFileSync(file,'utf8'));
+    if(fallback&&typeof fallback==='object'&&!Array.isArray(fallback)&&(!data||typeof data!=='object'||Array.isArray(data)))throw new Error('Expected a JSON object');
+    return data;
+  }
   catch(error){
     let backup=null;
     if(!corruptJsonBackups.has(file)){
@@ -161,6 +175,7 @@ const readJson=(name,fallback)=>{
       try{fs.copyFileSync(file,backup)}catch(backupError){log('error','Corrupt JSON backup failed',{name,error:backupError.message});backup=null}
     }
     log('error','JSON read failed',{name,error:error.message,backup:backup?path.basename(backup):undefined});
+    if(strict)throw Object.assign(new Error(`Cannot read ${name}; restore the saved backup`),{code:'STORAGE_INVALID'});
     return fallback;
   }
 };
@@ -171,19 +186,27 @@ const LOCK_SESSION_MS=12*60*60*1000;
 const LOCK_MAX_SESSIONS=50;
 const unlockSessions=new Map();
 const unlockFailures=new Map();
-function securityConfig(){const data=readJson('security.json',{});return data&&typeof data==='object'?data:{}}
+let lockOperationPending=false;
+function securityConfig(){
+  const data=readJson('security.json',{},{strict:true});
+  if(Object.keys(data).length===0)return data;
+  if(!/^[a-f0-9]{128}$/i.test(data.passwordHash||'')||!/^[a-f0-9]{32}$/i.test(data.salt||''))throw Object.assign(new Error('Invalid security.json; restore the saved backup'),{code:'STORAGE_INVALID'});
+  return data;
+}
 function lockEnabled(){const config=securityConfig();return typeof config.passwordHash==='string'&&typeof config.salt==='string'&&config.passwordHash.length>0}
-function hashPassword(password,salt){return crypto.scryptSync(String(password).normalize('NFKC'),Buffer.from(salt,'hex'),64,{N:16384,r:8,p:1}).toString('hex')}
-function verifyPassword(password){
+function hashPassword(password,salt){return new Promise((resolve,reject)=>crypto.scrypt(String(password).normalize('NFKC'),Buffer.from(salt,'hex'),64,{N:16384,r:8,p:1},(error,derived)=>error?reject(error):resolve(derived.toString('hex'))))}
+async function verifyPassword(password){
+  if(typeof password!=='string'||password.length>200)return false;
   const config=securityConfig();
   if(!config.passwordHash||!config.salt)return false;
   const expected=Buffer.from(config.passwordHash,'hex');
-  const actual=Buffer.from(hashPassword(password,config.salt),'hex');
-  return expected.length===actual.length&&crypto.timingSafeEqual(expected,actual);
+  const actual=Buffer.from(await hashPassword(password,config.salt),'hex');
+  const current=securityConfig();
+  return config.passwordHash===current.passwordHash&&config.salt===current.salt&&expected.length===actual.length&&crypto.timingSafeEqual(expected,actual);
 }
-function storePassword(password){
+async function storePassword(password){
   const salt=crypto.randomBytes(16).toString('hex');
-  writeJson('security.json',{version:1,algorithm:'scrypt',salt,passwordHash:hashPassword(password,salt),updatedAt:new Date().toISOString()});
+  writeJson('security.json',{version:1,algorithm:'scrypt',salt,passwordHash:await hashPassword(password,salt),updatedAt:new Date().toISOString()});
 }
 function readCookie(req,name){
   for(const part of String(req.headers.cookie||'').split(';')){
@@ -278,8 +301,8 @@ function mediaSummary(media){
 function isSafeMedia(media){const level=Number(media?.nsfwLevel);return level===1||level===2}
 function pickFavoritePreview(model,{safe=false}={}){
   if(model?.preview?.url&&!safe)return mediaSummary(model.preview);
-  for(const version of model?.modelVersions||[]){
-    for(const media of version?.images||[]){
+  for(const version of Array.isArray(model?.modelVersions)?model.modelVersions:[]){
+    for(const media of Array.isArray(version?.images)?version.images:[]){
       if(safe&&!isSafeMedia(media))continue;
       const preview=mediaSummary(media);
       if(preview)return preview;
@@ -289,8 +312,8 @@ function pickFavoritePreview(model,{safe=false}={}){
 }
 function baseModelsFor(model){
   const values=[];
-  for(const value of model?.baseModels||[])if(cleanText(value,120))values.push(cleanText(value,120));
-  for(const version of model?.modelVersions||[]){
+  for(const value of Array.isArray(model?.baseModels)?model.baseModels:[])if(cleanText(value,120))values.push(cleanText(value,120));
+  for(const version of Array.isArray(model?.modelVersions)?model.modelVersions:[]){
     const value=cleanText(version?.baseModel,120);
     if(value&&!values.includes(value))values.push(value);
   }
@@ -378,6 +401,7 @@ function plainDescription(value){return String(value||'').replace(/<[^>]*>/g,' '
 function positiveId(value){const id=Number(value);return Number.isSafeInteger(id)&&id>0?id:null}
 function compactModelDetailBody(body,expectedId=null,{safe=false}={}){
   const model=JSON.parse(body);
+  if(!model||typeof model!=='object'||Array.isArray(model)||!positiveId(model.id)||(expectedId!==null&&positiveId(model.id)!==positiveId(expectedId)))throw Object.assign(new Error('invalid upstream model'),{code:'INVALID_UPSTREAM_JSON'});
   const modelId=positiveId(expectedId)??positiveId(model.id);
   if(!modelId)throw Object.assign(new Error('invalid upstream model id'),{code:'INVALID_UPSTREAM_JSON'});
   if(safe&&model.nsfw!==false)throw Object.assign(new Error('nsfw model hidden'),{code:'LOCKED_NSFW'});
@@ -435,6 +459,8 @@ function writeEnvToken(value,{clear=false}={}){
   fs.renameSync(tmp,ENV_FILE);
   try{fs.chmodSync(ENV_FILE,0o600)}catch{}
   process.env.CIVITAI_API_TOKEN=clean;
+  cacheGeneration++;
+  accountCacheRevision++;
   for(const key of [...apiCache.keys()])removeCacheEntry(key);
   inflight.clear();
   fallbackSearchCache.clear();
@@ -472,27 +498,31 @@ function retryAfterMs(response,attempt){
   }
   return Math.min(8000,RETRY_BASE_MS*Math.pow(2,attempt));
 }
-async function fetchOnce(url,{binary=false,useAuth=false}={}){
+async function fetchOnce(url,{binary=false,useAuth=false,deadline=Infinity}={}){
+  const remaining=Math.min(TIMEOUT,deadline-Date.now());
+  if(remaining<=0)throw Object.assign(new Error('upstream deadline exceeded'),{name:'AbortError',code:'UPSTREAM_BODY_TIMEOUT'});
   const ctl=new AbortController();
-  const timer=setTimeout(()=>ctl.abort(),TIMEOUT);
+  const timer=setTimeout(()=>ctl.abort(),remaining);
   try{return await fetch(url,{headers:apiHeaders(binary,useAuth),signal:ctl.signal,redirect:'follow'})}finally{clearTimeout(timer)}
 }
-async function readTextLimited(response,maxBytes=MAX_UPSTREAM_JSON_BYTES){
+async function readTextLimited(response,maxBytes=MAX_UPSTREAM_JSON_BYTES,deadline=Infinity){
+  const remaining=Math.min(TIMEOUT,deadline-Date.now());
+  if(remaining<=0){discardBody(response);throw Object.assign(new Error('upstream deadline exceeded'),{name:'AbortError',code:'UPSTREAM_BODY_TIMEOUT'})}
   const declared=Number(response.headers.get('content-length'));
-  if(Number.isFinite(declared)&&declared>maxBytes)throw Object.assign(new Error('upstream response too large'),{code:'UPSTREAM_TOO_LARGE'});
+  if(Number.isFinite(declared)&&declared>maxBytes){discardBody(response);throw Object.assign(new Error('upstream response too large'),{code:'UPSTREAM_TOO_LARGE'})}
   if(!response.body)return '';
   const reader=response.body.getReader();
   const chunks=[];
   let total=0;
   let timer=null;
-  const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{reader.cancel().catch(()=>{});reject(Object.assign(new Error('upstream body timeout'),{name:'AbortError',code:'UPSTREAM_BODY_TIMEOUT'}))},TIMEOUT)});
+  const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{reader.cancel().catch(()=>{});reject(Object.assign(new Error('upstream body timeout'),{name:'AbortError',code:'UPSTREAM_BODY_TIMEOUT'}))},remaining)});
   timeout.catch(()=>{});
   try{
     while(true){
       const {done,value}=await Promise.race([reader.read(),timeout]);
       if(done)break;
       total+=value.byteLength;
-      if(total>maxBytes){await reader.cancel();throw Object.assign(new Error('upstream response too large'),{code:'UPSTREAM_TOO_LARGE'})}
+      if(total>maxBytes){reader.cancel().catch(()=>{});throw Object.assign(new Error('upstream response too large'),{code:'UPSTREAM_TOO_LARGE'})}
       chunks.push(Buffer.from(value));
     }
     return Buffer.concat(chunks,total).toString('utf8');
@@ -522,7 +552,8 @@ async function retryEndpoint(url,options={},label='Civitai'){
     if(!isRetryableStatus(response.status)||attempt>=RETRY_COUNT)return response;
     const wait=retryAfterMs(response,attempt);
     log('warn','Civitai endpoint temporarily unavailable; retry scheduled',{endpoint:label,status:response.status,attempt:attempt+1,maxRetries:RETRY_COUNT,waitMs:wait});
-    try{await response.arrayBuffer()}catch{}
+    discardBody(response);
+    if(options.deadline&&Date.now()+wait>=options.deadline)throw Object.assign(new Error('upstream deadline exceeded'),{name:'AbortError',code:'UPSTREAM_BODY_TIMEOUT'});
     await sleep(wait);
   }
   return response;
@@ -534,7 +565,7 @@ async function civFetch(url,options={}){
   let primaryResponse=null;
   if(rateLimitRemainingMs()>0)return rateLimitedResponse();
   try{
-    primaryResponse=await fetchOnce(url,{binary,useAuth});
+    primaryResponse=await fetchOnce(url,{...options,binary,useAuth});
     if(primaryResponse.status===429){noteRateLimit(primaryResponse);return primaryResponse}
     if(!fallbackUrl||!isRetryableStatus(primaryResponse.status))return primaryResponse;
     log('warn','Primary Civitai endpoint returned retryable status',{status:primaryResponse.status});
@@ -543,7 +574,7 @@ async function civFetch(url,options={}){
     if(!fallbackUrl)throw primaryError;
   }
   try{
-    const fallbackResponse=await retryEndpoint(fallbackUrl,{binary,useAuth},'fallback');
+    const fallbackResponse=await retryEndpoint(fallbackUrl,{...options,binary,useAuth},'fallback');
     if(!fallbackResponse.ok)log('warn','Civitai fallback endpoint returned an error',{status:fallbackResponse.status});
     const useFallback=fallbackResponse.ok||!primaryResponse;
     discardBody(useFallback?primaryResponse:fallbackResponse);
@@ -562,7 +593,7 @@ function discardBody(response){try{response?.body?.cancel?.().catch(()=>{})}catc
 async function civFetchFallback(url,options={}){
   const fallbackUrl=buildFallbackUrl(url);
   if(!fallbackUrl)return civFetch(url,options);
-  return retryEndpoint(fallbackUrl,{binary:!!options.binary,useAuth:!!options.useAuth},'forced-fallback');
+  return retryEndpoint(fallbackUrl,{...options,binary:!!options.binary,useAuth:!!options.useAuth},'forced-fallback');
 }
 function removeCacheEntry(key){
   const hit=apiCache.get(key);
@@ -594,8 +625,8 @@ function normalizeSearchText(value=''){return String(value).toLocaleLowerCase('e
 function modelSearchScore(model,needle){
   const name=normalizeSearchText(model?.name);
   const creator=normalizeSearchText(model?.creator?.username);
-  const tags=(model?.tags||[]).map(normalizeSearchText).join(' ');
-  const versions=(model?.modelVersions||[]).map(version=>`${normalizeSearchText(version?.name)} ${normalizeSearchText(version?.baseModel)}`).join(' ');
+  const tags=(Array.isArray(model?.tags)?model.tags:[]).map(normalizeSearchText).join(' ');
+  const versions=(Array.isArray(model?.modelVersions)?model.modelVersions:[]).map(version=>`${normalizeSearchText(version?.name)} ${normalizeSearchText(version?.baseModel)}`).join(' ');
   if(!needle)return 0;
   let score=0;
   if(name===needle)score+=1000;else if(name.startsWith(needle))score+=500;else if(name.includes(needle))score+=250;
@@ -604,7 +635,7 @@ function modelSearchScore(model,needle){
   if(versions.includes(needle))score+=30;
   return score;
 }
-function fallbackSearchKey(query){const value=new URLSearchParams(query);value.delete('cursor');value.delete('page');value.delete('limit');return `fallback-search:${value.toString()}`}
+function fallbackSearchKey(query){const value=new URLSearchParams(query);value.delete('cursor');value.delete('page');value.delete('limit');return `fallback-search:${cacheGeneration}:${value.toString()}`}
 function localCursorOffset(value){const match=String(value||'').match(/^local:(\d+)$/);return match?Math.max(0,Number(match[1])||0):0}
 async function buildFallbackSearch(query,reason='upstream-overloaded'){
   const search=(query.get('query')||'').trim();
@@ -615,16 +646,11 @@ async function buildFallbackSearch(query,reason='upstream-overloaded'){
   let cached=fallbackSearchCache.get(key);
   if(!cached||Date.now()-cached.time>FALLBACK_SEARCH_CACHE_MS){
     const scanKey=`scan:${key}`;
-    let scan=inflight.get(scanKey);
-    if(!scan){
-      scan=scanFallbackCatalog(query,needle,key).finally(()=>inflight.delete(scanKey));
-      inflight.set(scanKey,scan);
-    }
-    cached=await scan;
+    cached=await sharedRequest(scanKey,()=>scanFallbackCatalog(query,needle,key));
   }
   const items=cached.items.slice(offset,offset+limit);
   const nextOffset=offset+items.length;
-  return {items,metadata:{nextCursor:nextOffset<cached.items.length?`local:${nextOffset}`:null,nextPage:null,totalItems:cached.items.length,pageSize:limit,searchFallback:true,fallbackReason:reason,scannedItems:cached.scanned,scannedPages:cached.pages,fallbackLimited:cached.pages>=FALLBACK_SEARCH_SCAN_PAGES}};
+  return {items,metadata:{nextCursor:nextOffset<cached.items.length?`local:${nextOffset}`:null,nextPage:null,totalItems:cached.items.length,pageSize:limit,searchFallback:true,fallbackReason:reason,scannedItems:cached.scanned,scannedPages:cached.pages,fallbackLimited:!!cached.incomplete||cached.pages>=FALLBACK_SEARCH_SCAN_PAGES}};
 }
 async function scanFallbackCatalog(query,needle,key){
   {
@@ -634,13 +660,22 @@ async function scanFallbackCatalog(query,needle,key){
     let cursor='';
     let scanned=0;
     let pages=0;
+    let incomplete=false;
+    const pointers=new Set();
+    const deadline=Date.now()+Math.max(3000,TIMEOUT);
     for(let page=0;page<FALLBACK_SEARCH_SCAN_PAGES;page++){
+      if(Date.now()>=deadline){incomplete=true;break}
       if(cursor)scanParams.set('cursor',cursor);else scanParams.delete('cursor');
-      const response=await civFetch(`${API_BASE}/api/v1/models?${scanParams}`,{useAuth:false});
-      const body=await readTextLimited(response);
-      if(!response.ok){log('warn','Fallback catalog scan stopped',{status:response.status,page:page+1});break}
+      let response,body;
+      try{response=await civFetch(`${API_BASE}/api/v1/models?${scanParams}`,{useAuth:false,deadline});body=await readTextLimited(response,MAX_UPSTREAM_JSON_BYTES,deadline)}
+      catch(error){if(!pages)throw error;incomplete=true;log('warn','Fallback catalog scan interrupted',{page:page+1,code:error.code||error.name});break}
+      if(!response.ok){
+        if(!pages)throw Object.assign(new Error(upstreamMessage(body,response.status)),{code:'UPSTREAM_HTTP',status:response.status});
+        incomplete=true;log('warn','Fallback catalog scan stopped',{status:response.status,page:page+1});break;
+      }
       let data;
-      try{data=JSON.parse(body)}catch{break}
+      try{data=JSON.parse(body);if(!Array.isArray(data?.items))throw new Error('invalid catalog')}
+      catch{if(!pages)throw Object.assign(new Error('invalid upstream catalog'),{code:'INVALID_UPSTREAM_JSON'});incomplete=true;break}
       pages++;
       const items=Array.isArray(data?.items)?data.items:[];
       scanned+=items.length;
@@ -649,12 +684,15 @@ async function scanFallbackCatalog(query,needle,key){
         if(score>0&&!found.has(model.id))found.set(model.id,{model:compactCatalogModel(model,{safe:scanParams.get('nsfw')==='false'}),score,order:scanned});
       }
       cursor=String(data?.metadata?.nextCursor||'');
+      if(!cursor&&data?.metadata?.nextPage){try{cursor=new URL(data.metadata.nextPage,API_BASE).searchParams.get('cursor')||''}catch{}}
+      if(pointers.has(cursor)){incomplete=true;break}
+      pointers.add(cursor);
       if(!cursor||items.length===0)break;
     }
     const matches=[...found.values()].filter(item=>item.model).sort((a,b)=>b.score-a.score||a.order-b.order).map(item=>item.model);
-    const cached={time:Date.now(),items:matches,scanned,pages};
+    const cached={time:Date.now(),items:matches,scanned,pages,incomplete};
     fallbackSearchCache.delete(key);
-    fallbackSearchCache.set(key,cached);
+    if(!incomplete)fallbackSearchCache.set(key,cached);
     while(fallbackSearchCache.size>MAX_FALLBACK_CACHES)fallbackSearchCache.delete(fallbackSearchCache.keys().next().value);
     return cached;
   }
@@ -682,21 +720,26 @@ function setSecurityHeaders(res){
 function readBody(req,limit=MAX_JSON_BODY_BYTES){
   return new Promise((resolve,reject)=>{
     let size=0,chunks=[],tooLarge=false,settled=false;
-    const fail=error=>{if(settled)return;settled=true;reject(error)};
+    const timer=setTimeout(()=>fail(Object.assign(new Error('body timeout'),{code:'BODY_TIMEOUT'})),Math.min(TIMEOUT,30000));
+    timer.unref?.();
+    const fail=error=>{if(settled)return;settled=true;chunks=[];clearTimeout(timer);reject(error)};
+    req.on('error',fail);
+    req.on('aborted',()=>fail(Object.assign(new Error('request aborted'),{code:'REQUEST_ABORTED'})));
+    const declared=Number(req.headers['content-length']);
+    if(Number.isFinite(declared)&&declared>limit){req.resume();return fail(Object.assign(new Error('body too large'),{code:'BODY_TOO_LARGE'}))}
     req.on('data',chunk=>{
+      if(settled)return;
       size+=chunk.length;
       if(tooLarge)return;
-      if(size>limit){tooLarge=true;chunks=[];return}
+      if(size>limit){tooLarge=true;fail(Object.assign(new Error('body too large'),{code:'BODY_TOO_LARGE'}));return}
       chunks.push(chunk);
     });
     req.on('end',()=>{
       if(settled)return;
       if(tooLarge)return fail(Object.assign(new Error('body too large'),{code:'BODY_TOO_LARGE'}));
       const buffer=Buffer.concat(chunks).toString('utf8');
-      try{const data=buffer?JSON.parse(buffer):{};if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('not an object');settled=true;resolve(data)}catch{fail(Object.assign(new Error('invalid json'),{code:'INVALID_JSON'}))}
+      try{const data=buffer?JSON.parse(buffer):{};if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('not an object');settled=true;clearTimeout(timer);chunks=[];resolve(data)}catch{fail(Object.assign(new Error('invalid json'),{code:'INVALID_JSON'}))}
     });
-    req.on('error',fail);
-    req.on('aborted',()=>fail(Object.assign(new Error('request aborted'),{code:'REQUEST_ABORTED'})));
   });
 }
 function requestIsJson(req){return /^application\/json(?:\s*;|$)/i.test(String(req.headers['content-type']||''))}
@@ -717,6 +760,7 @@ function trustedHost(req){
   return loopbackHosts.includes(requested)||requested===configured||net.isIP(requested)!==0;
 }
 function bodyError(req,res,error){
+  if(error?.code==='BODY_TIMEOUT')return json(res,408,{error:requestLanguage(req)==='en'?'Request body timed out.':'Истекло время получения запроса.',code:error.code});
   if(error?.code==='BODY_TOO_LARGE')return json(res,413,{error:message(req,'bodyTooLarge'),code:error.code});
   if(error?.code==='INVALID_JSON')return json(res,400,{error:message(req,'invalidJson'),code:error.code});
   return json(res,400,{error:message(req,'internal'),code:error?.code||'BAD_REQUEST'});
@@ -759,7 +803,11 @@ const COLLECTION_TYPES=['Model','Image','Post','Article'];
 const TOKEN_SCOPE={MediaRead:32,MediaWrite:64,MediaDelete:128,BuzzRead:65536,CollectionsRead:131072,CollectionsWrite:262144};
 const COLLECTION_ITEM_KEYS={Model:'modelId',Image:'imageId',Post:'postId',Article:'articleId'};
 function collectionItemRef(type,id){const key=COLLECTION_ITEM_KEYS[type];const itemId=positiveId(id);return key&&itemId?{type,key,itemId}:null}
-function invalidateCollections(){for(const key of [...apiCache.keys()])if(key.startsWith('account:collection'))removeCacheEntry(key)}
+function invalidateCollections(){
+  accountCacheRevision++;
+  for(const key of [...apiCache.keys()])if(key.startsWith('account:collection'))removeCacheEntry(key);
+  for(const key of [...inflight.keys()])if(key.startsWith('account:collection'))inflight.delete(key);
+}
 function unflattenDevalue(values){
   if(!Array.isArray(values))return values;
   const cache=new Map();
@@ -833,7 +881,9 @@ async function civTrpcMutation(procedure,input){
   return data;
 }
 function invalidateAccountContent(){
-  for(const key of [...apiCache.keys()])if(/^account:(images|posts|collection|profile)/.test(key))removeCacheEntry(key);
+  accountCacheRevision++;
+  for(const key of [...apiCache.keys()])if(/^account:(images|image-info|posts|collection|profile)/.test(key))removeCacheEntry(key);
+  for(const key of [...inflight.keys()])if(/^account:(images|image-info|posts|collection|profile)/.test(key))inflight.delete(key);
 }
 const UPLOAD_TYPES={'image/png':'image','image/jpeg':'image','image/webp':'image','image/gif':'image','image/avif':'image','video/mp4':'video','video/webm':'video','video/quicktime':'video'};
 const MAX_UPLOAD_IMAGE_BYTES=50*1024*1024;
@@ -1002,12 +1052,13 @@ async function cachedAccount(key,loader,maxAge=ACCOUNT_CACHE_MS){
   const cacheKey=`account:${key}`;
   const hit=cacheGet(cacheKey,maxAge);
   if(hit)return JSON.parse(hit.body);
-  let job=inflight.get(cacheKey);
-  if(!job){
-    job=loader().then(data=>{cacheSet(cacheKey,JSON.stringify(data));return data}).finally(()=>inflight.delete(cacheKey));
-    inflight.set(cacheKey,job);
-  }
-  return job;
+  const generation=cacheGeneration,revision=accountCacheRevision;
+  return sharedRequest(cacheKey,async()=>{
+    const data=await loader();
+    if(generation!==cacheGeneration)throw Object.assign(new Error('Account changed; reload the request'),{code:'ACCOUNT_CHANGED',status:409});
+    if(revision===accountCacheRevision)cacheSet(cacheKey,JSON.stringify(data));
+    return data;
+  });
 }
 function civitaiMediaFromUuid(media){
   const raw=cleanText(media?.url,600);
@@ -1244,11 +1295,18 @@ async function handleLockApi(req,res,url){
   let body;
   try{body=await readBody(req)}catch(error){return bodyError(req,res,error)}
   const pathname=url.pathname;
+  if(lockOperationPending){res.setHeader('Retry-After','1');return json(res,429,{error:message(req,'lockTooManyAttempts',1),code:'LOCK_THROTTLED',retryAfter:1})}
+  lockOperationPending=true;
+  try{
+  if(pathname!=='/api/lock/lock'){
+    const delay=unlockDelayMs(req);
+    if(delay>0){res.setHeader('Retry-After',String(Math.ceil(delay/1000)));return json(res,429,{error:message(req,'lockTooManyAttempts',Math.ceil(delay/1000)),code:'LOCK_THROTTLED',retryAfter:Math.ceil(delay/1000)})}
+  }
   if(pathname==='/api/lock/unlock'){
     if(!lockEnabled())return json(res,200,{ok:true,status:status(req)});
     const wait=unlockDelayMs(req);
     if(wait>0){res.setHeader('Retry-After',String(Math.ceil(wait/1000)));return json(res,429,{error:message(req,'lockTooManyAttempts',Math.ceil(wait/1000)),code:'LOCK_THROTTLED',retryAfter:Math.ceil(wait/1000)})}
-    if(typeof body.password!=='string'||!verifyPassword(body.password)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
+    if(typeof body.password!=='string'||!await verifyPassword(body.password)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
     unlockFailures.delete(clientKey(req));
     createUnlockSession(res);
     return json(res,200,{ok:true,status:{...status(req),lock:{enabled:true,unlocked:true},maskedToken:maskToken(token())}});
@@ -1260,23 +1318,24 @@ async function handleLockApi(req,res,url){
   if(isLockedRequest(req))return json(res,423,{error:message(req,'lockedMode'),code:'LOCKED'});
   if(pathname==='/api/lock/password'){
     if(lockEnabled()){
-      if(typeof body.currentPassword!=='string'||!verifyPassword(body.currentPassword)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
+      if(typeof body.currentPassword!=='string'||!await verifyPassword(body.currentPassword)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
     }
     if(!validNewPassword(body.newPassword))return json(res,400,{error:message(req,'lockPasswordRules'),code:'PASSWORD_RULES'});
-    storePassword(body.newPassword);
+    await storePassword(body.newPassword);
     unlockSessions.clear();
     createUnlockSession(res);
     return json(res,200,{ok:true,status:{...status(req),lock:{enabled:true,unlocked:true}}});
   }
   if(pathname==='/api/lock/remove'){
     if(!lockEnabled())return json(res,200,{ok:true,status:status(req)});
-    if(typeof body.currentPassword!=='string'||!verifyPassword(body.currentPassword)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
+    if(typeof body.currentPassword!=='string'||!await verifyPassword(body.currentPassword)){noteUnlockFailure(req);return json(res,401,{error:message(req,'lockWrongPassword'),code:'WRONG_PASSWORD'})}
     try{fs.unlinkSync(path.join(DATA,'security.json'))}catch(error){if(error.code!=='ENOENT')throw error}
     unlockSessions.clear();
     clearUnlockSession(req,res);
     return json(res,200,{ok:true,status:{...status(req),lock:{enabled:false,unlocked:true}}});
   }
   return json(res,404,{error:message(req,'apiNotFound')});
+  }finally{lockOperationPending=false}
 }
 function lockedRouteAllowed(req,url){
   const pathname=url.pathname;
@@ -1328,14 +1387,17 @@ async function handleApi(req,res,url){
       else if(body.clearApiToken===true&&token())writeEnvToken('',{clear:true});
       return json(res,200,{settings:next,status:status(req)});
     }catch(error){
-      if(error?.code==='BODY_TOO_LARGE'||error?.code==='INVALID_JSON')return bodyError(req,res,error);
+      if(['BODY_TOO_LARGE','INVALID_JSON','BODY_TIMEOUT'].includes(error?.code))return bodyError(req,res,error);
       if(error?.code==='INVALID_TOKEN')return json(res,400,{error:message(req,'tokenInvalid'),code:error.code});
       return json(res,400,{error:message(req,'settingsSave',DEBUG?error.message:'ошибка'),code:'SETTINGS_SAVE_FAILED'});
     }
   }
   if(req.method==='GET'&&url.pathname==='/api/models'){
+    const generation=cacheGeneration;
+    let cacheKey='';
+    let forceFallback=false;
     try{
-      const forceFallback=url.searchParams.get('_source')==='fallback';
+      forceFallback=url.searchParams.get('_source')==='fallback';
       const query=sanitizeQuery(url.searchParams);
       if(locked){query.set('nsfw','false');query.delete('favorites');query.delete('hidden')}
       const search=(query.get('query')||'').trim();
@@ -1347,21 +1409,17 @@ async function handleApi(req,res,url){
         return json(res,200,data);
       }
       const upstreamUrl=`${API_BASE}/api/v1/models?${query}`;
-      const cacheKey=`models:${locked?'safe':'full'}:${forceFallback?'fallback':'auto'}:${query.toString()}`;
+      cacheKey=`models:${generation}:${locked?'safe':'full'}:${forceFallback?'fallback':'auto'}:${query.toString()}`;
       const fresh=cacheGet(cacheKey);
       if(fresh){res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Civitai-Proxy-Cache':'fresh','X-Civitai-Proxy-Source':forceFallback?'fallback':'auto'});return res.end(fresh.body)}
       const requiresAuth=query.has('favorites')||query.has('hidden');
-      let job=inflight.get(cacheKey);
-      if(!job){
-        job=(async()=>{
+      const job=sharedRequest(cacheKey,async()=>{
           const fetchPage=useAuth=>forceFallback?civFetchFallback(upstreamUrl,{useAuth}):civFetch(upstreamUrl,{useAuth});
           let response=await fetchPage(requiresAuth);
-          if((response.status===401||response.status===403)&&!requiresAuth&&token())response=await fetchPage(true);
+          if((response.status===401||response.status===403)&&!requiresAuth&&token()){discardBody(response);response=await fetchPage(true)}
           const body=await readTextLimited(response);
           return {response,body};
-        })().finally(()=>inflight.delete(cacheKey));
-        inflight.set(cacheKey,job);
-      }
+      });
       const {response,body}=await job;
       if(!response.ok){
         const stale=cacheGet(cacheKey,STALE_CACHE_MS);
@@ -1386,36 +1444,41 @@ async function handleApi(req,res,url){
         return json(res,response.status,{error:friendly,upstream:DEBUG?upstream:undefined,retryable:isRetryableStatus(response.status),retryAfter});
       }
       const compactBody=compactCatalogBody(body,{safe:locked});
-      cacheSet(cacheKey,compactBody);
+      if(generation===cacheGeneration)cacheSet(cacheKey,compactBody);
       res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Civitai-Proxy-Cache':'miss','X-Civitai-Proxy-Source':forceFallback?'fallback':'auto'});
       return res.end(compactBody);
     }catch(error){
       const info=errorInfo(error);
+      const stale=cacheKey&&generation===cacheGeneration?cacheGet(cacheKey,STALE_CACHE_MS):null;
+      if(stale&&(!error.status||isRetryableStatus(error.status))){
+        res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Civitai-Proxy-Cache':'stale','X-Civitai-Proxy-Source':forceFallback?'fallback':'auto'});
+        return res.end(stale.body);
+      }
       log('error','Models proxy failed',info);
       const timeout=error.name==='AbortError'||info.code==='UND_ERR_CONNECT_TIMEOUT';
-      return json(res,timeout?504:502,{error:timeout?message(req,'timeout'):message(req,'connection',info.code),detail:DEBUG?info:undefined});
+      const code=error.status===429?429:timeout?504:502;
+      const retryAfter=code===429?Math.max(1,Math.ceil(rateLimitRemainingMs()/1000)):undefined;
+      if(retryAfter)res.setHeader('Retry-After',String(retryAfter));
+      return json(res,code,{error:code===429?message(req,'limited'):timeout?message(req,'timeout'):message(req,'connection',info.code),retryable:true,retryAfter,detail:DEBUG?info:undefined});
     }
   }
   const modelMatch=url.pathname.match(/^\/api\/models\/(\d+)$/);
   if(req.method==='GET'&&modelMatch){
     const modelId=positiveId(modelMatch[1]);
     if(!modelId)return json(res,400,{error:message(req,'invalidId'),code:'INVALID_ID'});
-    const cacheKey=`model-detail:${locked?'safe':'full'}:${modelId}`;
-    const fetchKey=`model-fetch:${modelId}`;
+    const generation=cacheGeneration;
+    const cacheKey=`model-detail:${generation}:${locked?'safe':'full'}:${modelId}`;
+    const fetchKey=`model-fetch:${generation}:${modelId}`;
     try{
       const cached=cacheGet(cacheKey,MODEL_DETAIL_CACHE_MS);
-      if(cached){res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, max-age=60','X-Local-Cache':'HIT'});return res.end(cached.body)}
-      let job=inflight.get(fetchKey);
-      if(!job){
-        job=(async()=>{
+      if(cached){res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Local-Cache':'HIT'});return res.end(cached.body)}
+      const job=sharedRequest(fetchKey,async()=>{
           const upstreamUrl=`${API_BASE}/api/v1/models/${modelId}`;
           let response=await civFetch(upstreamUrl);
           if((response.status===401||response.status===403||response.status===404)&&token()){discardBody(response);response=await civFetch(upstreamUrl,{useAuth:true})}
           const body=await readTextLimited(response);
           return {response,body};
-        })().finally(()=>inflight.delete(fetchKey));
-        inflight.set(fetchKey,job);
-      }
+      });
       const {response,body}=await job;
       if(!response.ok){
         const stale=cacheGet(cacheKey,STALE_CACHE_MS+MODEL_DETAIL_CACHE_MS);
@@ -1428,11 +1491,16 @@ async function handleApi(req,res,url){
       let compactBody;
       try{compactBody=compactModelDetailBody(body,modelId,{safe:locked})}
       catch(error){if(error?.code==='LOCKED_NSFW')return json(res,423,{error:message(req,'lockedNsfw'),code:'LOCKED_NSFW'});throw error}
-      cacheSet(cacheKey,compactBody);
-      res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, max-age=60','X-Local-Cache':'MISS'});
+      if(generation===cacheGeneration)cacheSet(cacheKey,compactBody);
+      res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Local-Cache':'MISS'});
       return res.end(compactBody);
     }catch(error){
       const info=errorInfo(error);
+      const stale=generation===cacheGeneration?cacheGet(cacheKey,STALE_CACHE_MS+MODEL_DETAIL_CACHE_MS):null;
+      if(stale&&(!error.status||isRetryableStatus(error.status))){
+        res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Local-Cache':'STALE'});
+        return res.end(stale.body);
+      }
       log('error','Model proxy failed',{modelId,...info});
       return json(res,502,{error:message(req,'modelFailed',info.code),detail:DEBUG?info:undefined});
     }
@@ -1458,7 +1526,7 @@ async function handleApi(req,res,url){
       writeJson('favorites.json',db);
       return json(res,200,db);
     }catch(error){
-      if(error?.code==='BODY_TOO_LARGE'||error?.code==='INVALID_JSON')return bodyError(req,res,error);
+      if(['BODY_TOO_LARGE','INVALID_JSON','BODY_TIMEOUT'].includes(error?.code))return bodyError(req,res,error);
       return json(res,400,{error:message(req,'internal'),code:error?.code||'FAVORITES_SAVE_FAILED'});
     }
   }
@@ -1482,7 +1550,12 @@ async function handleApi(req,res,url){
       const encoding=String(response.headers.get('content-encoding')||'identity').toLowerCase();
       if(length&&/^\d+$/.test(length)&&encoding==='identity')headers['Content-Length']=length;
       res.writeHead(200,headers);
-      return pipeline(Readable.fromWeb(response.body),res,error=>{if(error&&error.code!=='ERR_STREAM_PREMATURE_CLOSE')log('warn','Download stream interrupted',{versionId,code:error.code||error.name})});
+      const stream=Readable.fromWeb(response.body);
+      let idleTimer;
+      const resetIdle=()=>{clearTimeout(idleTimer);idleTimer=setTimeout(()=>stream.destroy(Object.assign(new Error('Download stalled'),{code:'DOWNLOAD_IDLE_TIMEOUT'})),Math.max(30000,TIMEOUT));idleTimer.unref?.()};
+      stream.on('data',resetIdle);
+      resetIdle();
+      return pipeline(stream,res,error=>{clearTimeout(idleTimer);stream.removeListener('data',resetIdle);if(error&&error.code!=='ERR_STREAM_PREMATURE_CLOSE')log('warn','Download stream interrupted',{versionId,code:error.code||error.name})});
     }catch(error){
       const info=errorInfo(error);
       log('error','Download proxy failed',{versionId,...info});
@@ -1514,7 +1587,10 @@ const server=http.createServer(async(req,res)=>{
     return text(res,404,'Файл не найден');
   }catch(error){
     log('error','Unhandled server error',{error:error.message,stack:DEBUG?error.stack:undefined});
-    if(!res.headersSent)return json(res,500,{error:message(req,'internal')});
+    if(!res.headersSent){
+      const language=String(req.headers['x-ui-language']||'').toLowerCase()==='en'?'en':'ru';
+      return json(res,error?.code==='STORAGE_INVALID'?503:500,{error:error?.code==='STORAGE_INVALID'?(language==='en'?'Local security data is damaged. Restore security.json from backup.':'Повреждены локальные данные защиты. Восстановите security.json из резервной копии.'):serverText[language].internal,code:error?.code||'INTERNAL_ERROR'});
+    }
     res.end();
   }
 });

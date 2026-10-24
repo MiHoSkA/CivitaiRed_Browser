@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
-node server.js
+cd -- "$(dirname -- "$0")" || exit 1
+exec node ./server.js

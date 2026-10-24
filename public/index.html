@@ -2,12 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
   <meta name="theme-color" content="#08090d">
   <meta name="color-scheme" content="dark">
   <title>Civitai Red Browser</title>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.8.2">
+  <link rel="stylesheet" href="/style.css?v=1.8.3">
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="grain"></div>
@@ -158,6 +158,6 @@
   <div id="publishModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="publishTitle"><div class="modal-card publish panel"><button class="modal-close" id="publishClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="myContent">Мой контент</span><h2 id="publishTitle" data-i18n="newPost">Новая публикация</h2><div id="dropZone" class="drop-zone" role="button" tabindex="0"><input id="publishFiles" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime" multiple hidden><span class="drop-icon" aria-hidden="true">⇪</span><b data-i18n="dropFiles">Перетащи файлы сюда или нажми, чтобы выбрать</b><small data-i18n="dropHint">Изображения до 50 МБ, видео до 750 МБ, до 20 файлов</small></div><div id="publishList" class="publish-list"></div><label for="publishTitleInput" data-i18n="postTitle">Название</label><input id="publishTitleInput" type="text" maxlength="255" autocomplete="off" data-i18n-placeholder="postTitlePlaceholder"><label for="publishDetail" data-i18n="postDescription">Описание</label><textarea id="publishDetail" maxlength="5000" rows="3" data-i18n-placeholder="postDescriptionPlaceholder"></textarea><div class="publish-actions"><button id="publishSubmit" class="primary" type="button" data-i18n="publishNow">Опубликовать</button></div><div id="publishMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
   <div id="collectModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="collectTitle"><div class="modal-card collect panel"><button class="modal-close" id="collectClose" type="button" aria-label="Close">×</button><span class="settings-kicker" data-i18n="collections">Коллекции</span><h2 id="collectTitle" data-i18n="addToCollection">Добавить в коллекцию</h2><p id="collectSubtitle" class="muted collect-subtitle"></p><div id="collectList" class="collect-list" role="group"></div><div class="collect-new"><label for="collectName" data-i18n="newCollection">Новая коллекция</label><div class="collect-new-row"><input id="collectName" type="text" maxlength="30" autocomplete="off" data-i18n-placeholder="collectionNamePlaceholder"><div class="collect-privacy" role="radiogroup"><button type="button" class="privacy-chip active" data-read="Private" data-i18n="privacyPrivate">Приватная</button><button type="button" class="privacy-chip" data-read="Unlisted" data-i18n="privacyUnlisted">По ссылке</button><button type="button" class="privacy-chip" data-read="Public" data-i18n="privacyPublic">Публичная</button></div><button id="collectCreate" class="primary" type="button" data-i18n="createAndAdd">Создать и добавить</button></div></div><div id="collectMsg" class="settings-msg" role="status" aria-live="polite"></div></div></div>
   <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
-  <script src="/app.js?v=1.8.0" defer></script>
+  <script src="/app.js?v=1.8.3" defer></script>
 </body>
 </html>
