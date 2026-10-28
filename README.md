@@ -9,7 +9,7 @@
 [Русский](#-русский) · [English](#-english)
 
 ![Node.js](https://img.shields.io/badge/Node.js-18.17%2B-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.8.0-ff406d?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.8.3-ff406d?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-RU%20%2F%20EN-8b5cf6?style=flat-square)
 ![Docker](https://img.shields.io/badge/Docker-not%20required-111827?style=flat-square)
 ![Electron](https://img.shields.io/badge/Electron-not%20used-111827?style=flat-square)
@@ -101,7 +101,7 @@ http://127.0.0.1:3210
 В консоли появится:
 
 ```text
-[READY] Civitai Red Browser v1.8.0 running at http://127.0.0.1:3210
+[READY] Civitai Red Browser v1.8.3 running at http://127.0.0.1:3210
 ```
 
 ## API-ключ Civitai
@@ -246,7 +246,7 @@ The project runs from a single `server.js` entry point and does not require Elec
 
 ![Model details in English](screenshots/model-en.svg)
 
-> These illustrations show an earlier version using showcase data. They do not include the new 1.8.0 sections; the current interface may differ.
+> These illustrations show an earlier version using showcase data. They do not include the new 1.8.3 sections; the current interface may differ.
 
 ## Requirements
 
@@ -286,7 +286,7 @@ http://127.0.0.1:3210
 The console should show:
 
 ```text
-[READY] Civitai Red Browser v1.8.0 running at http://127.0.0.1:3210
+[READY] Civitai Red Browser v1.8.3 running at http://127.0.0.1:3210
 ```
 
 ## Civitai API key
@@ -389,6 +389,6 @@ CivitaiRed_Browser/
 ---
 
 <div align="center">
-  <strong>Civitai Red Browser · v1.8.0</strong><br>
+  <strong>Civitai Red Browser · v1.8.3</strong><br>
   Local-first · Dark UI · RU / EN
 </div>
